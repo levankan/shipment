@@ -4,6 +4,7 @@ from django.contrib import messages
 from django.core.exceptions import ValidationError
 from .models import Profile
 from django.contrib.auth import authenticate, login
+import re  # For regular expression validation
 
 
 
@@ -12,6 +13,8 @@ def home(request):
 
 def about(request):
     return render(request, 'custom_auth/about.html')  # Render about template
+
+
 
 
 
@@ -44,6 +47,11 @@ def sign_up(request):
 
         if len(password) < 12:
             errors.append("Password must be at least 12 characters long.")
+
+        # Regular expression for 2 uppercase letters and 2 symbols
+        password_pattern = r'^(?=.*[A-Z].*[A-Z])(?=.*[!@#$%^&*(),.?":{}|<>].*[!@#$%^&*(),.?":{}|<>]).+$'
+        if not re.match(password_pattern, password):
+            errors.append("Password must contain at least 2 uppercase letters and 2 symbols.")
 
         if User.objects.filter(username=username).exists():
             errors.append("Username is already taken.")
@@ -80,6 +88,7 @@ def sign_up(request):
             return redirect('sign_up')
 
     return render(request, 'custom_auth/sign_up.html')
+
 
 
 
