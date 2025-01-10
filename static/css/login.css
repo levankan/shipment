@@ -1,0 +1,112 @@
+/* Login page specific styles */
+body {
+    font-family: 'Arial', sans-serif;
+    margin: 0;
+    padding: 0;
+    background-color: #f0f0f5; /* Soft light gray background */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+}
+
+.container {
+    background-color: #ffffff; /* White background */
+    padding: 30px;
+    border-radius: 10px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* Subtle shadow */
+    width: 100%;
+    max-width: 400px; /* Centered and responsive */
+    text-align: center;
+}
+
+h1 {
+    font-size: 24px;
+    margin-bottom: 20px;
+    color: #333; /* Dark text */
+}
+
+form label {
+    display: flex;
+    align-items: right;
+    gap: 5px; /* Spacing between the text and the checkbox */
+    font-size: 5px; /* Ensure consistent font size */
+    color: #555; /* Gray label text */
+    margin-bottom: 15px; /* Spacing below the label */
+}
+
+form input {
+    width: 100%;
+    padding: 10px;
+    margin-bottom: 15px;
+    border: 1px solid #ccc; /* Light gray border */
+    border-radius: 5px;
+    font-size: 14px;
+    color: #333;
+}
+
+form input:focus {
+    border-color: #007bff; /* Blue border on focus */
+    outline: none;
+    box-shadow: 0 0 5px rgba(0, 123, 255, 0.5); /* Subtle glow */
+}
+
+/* Button styles */
+/* Input fields */
+form input {
+    width: calc(100% - 20px); /* Match the button width (subtract padding) */
+    padding: 10px;
+    margin-bottom: 15px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    font-size: 14px;
+    color: #333;
+    box-sizing: border-box; /* Ensure padding and border are included in width */
+}
+
+form input:focus {
+    border-color: #007bff;
+    outline: none;
+    box-shadow: 0 0 5px rgba(0, 123, 255, 0.5);
+}
+
+/* Button */
+form button {
+    width: 100%; /* Full width of the form container */
+    padding: 10px; /* Same padding as input fields */
+    font-size: 16px;
+    font-weight: bold;
+    color: #fff;
+    background-color: #007bff;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s ease, transform 0.2s ease;
+    box-sizing: border-box; /* Ensure consistent width calculation */
+}
+
+form button:hover {
+    background-color: #0056b3;
+    transform: scale(1.02);
+}
+
+
+
+
+form a {
+    display: inline-block;
+    margin-top: 15px;
+    font-size: 14px;
+    color: #007bff; /* Blue links */
+    text-decoration: none;
+}
+
+form a:hover {
+    text-decoration: underline;
+}
+
+@media (max-width: 768px) {
+    .container {
+        padding: 20px;
+    }
+}

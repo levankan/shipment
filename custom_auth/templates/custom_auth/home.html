@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Home</title>
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'css/styles.css' %}">
+</head>
+<body>
+    <nav>
+        <button class="button" onclick="location.href='/about/'">About</button>
+        <button class="button" onclick="location.href='/sign-in/'">Sign In</button>
+        <button class="button" onclick="location.href='/sign-up/'">Sign Up</button>
+    </nav>
+    <div class="container">
+        <h1>Welcome to the Shipment Project</h1>
+    </div>
+</body>
+</html>

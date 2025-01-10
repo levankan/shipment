@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sign Up</title>
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'css/sign_up.css' %}">
+</head>
+<body>
+    <div class="form-container">
+        <h1>Sign Up</h1>
+        <p class="instruction-text">Please fill out all fields carefully to complete your registration.</p>
+        {% if messages %}
+            <div class="messages">
+                {% for message in messages %}
+                    <p class="{{ message.tags }}" style="color: red; font-weight: bold;">{{ message }}</p>
+                {% endfor %}
+            </div>
+        {% endif %}
+        <form method="post">
+            {% csrf_token %}
+            <label for="username">Username:</label>
+            <input type="text" name="username" id="username" required>
+
+            <label for="email">Email:</label>
+            <input type="email" name="email" id="email" required>
+
+            <label for="repeat_email">Repeat Email:</label>
+            <input type="email" name="repeat_email" id="repeat_email" required>
+
+            <label for="phone_number">Phone Number:</label>
+            <div class="phone-number-field">
+                <span class="country-code">+995</span>
+                <input type="tel" name="phone_number" id="phone_number" pattern="[0-9]{9}" required
+                       placeholder="Enter 9-digit number">
+            </div>
+
+            <label for="password">Password:</label>
+            <input type="password" name="password" id="password" equired minlength="12">
+
+            <label for="confirm_password">Confirm Password:</label>
+            <input type="password" name="confirm_password" id="confirm_password" required minlength="12">
+
+            <label for="security_question">Security Question:</label>
+            <select name="security_question" id="security_question" required>
+                <option value="pet_name">What is the name of your first pet?</option>
+                <option value="mother_maiden">What is your mother's maiden name?</option>
+                <option value="birth_city">What city were you born in?</option>
+            </select>
+
+            <label for="security_answer">Your Answer:</label>
+            <input type="text" name="security_answer" id="security_answer" required>
+
+            <label>
+                <input type="checkbox" name="terms" required> I agree to the <a href="/terms">Terms and Conditions</a>
+            </label>
+
+            <button type="submit">Register</button>
+            <a href="{% url 'login' %}">If you already have an account: Sign In</a>
+        </form>
+    </div>
+</body>
+</html>
