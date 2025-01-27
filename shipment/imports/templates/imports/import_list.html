@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    {% load static %}
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>List of Imports</title>
+    <link rel="stylesheet" href="{% static 'css/imports/import_list.css' %}">
+</head>
+<body>
+    <div class="container">
+        <h1>List of Registered Imports</h1>
+        <div class="button-container">
+            <a href="{% url 'register_import' %}" class="button">Register New Import</a>
+        </div>
+        <ul class="import-list">
+            {% for import in imports %}
+                <li>
+                    <a href="{% url 'import_detail' import.unique_number %}" class="import-link">
+                        {{ import.unique_number }} - {{ import.name }}
+                    </a>
+                </li>
+            {% endfor %}
+        </ul>
+    </div>
+</body>
+</html>

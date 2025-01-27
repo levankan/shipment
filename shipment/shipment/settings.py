@@ -42,6 +42,7 @@ LOGOUT_REDIRECT_URL = '/auth/login/'  # Redirect after logout
 INSTALLED_APPS = [
     'sales',
     'authapp',
+    'imports',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',

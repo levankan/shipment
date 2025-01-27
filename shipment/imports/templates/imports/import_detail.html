@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ import.unique_number }}</title>
+</head>
+<body>
+    <h1>Details for {{ import.unique_number }}</h1>
+    <p><strong>Name:</strong> {{ import.name }}</p>
+    <p><strong>Description:</strong> {{ import.description }}</p>
+    <p><strong>Country:</strong> {{ import.country }}</p>
+    <p><strong>Incoterms:</strong> {{ import.incoterms }}</p>
+    <p><strong>Operation:</strong> {{ import.operation }}</p>
+    <p><strong>Dimensions:</strong> {{ import.length }} x {{ import.width }} x {{ import.height }}</p>
+    <p><strong>Gross Weight:</strong> {{ import.gross_weight }} kg</p>
+    <p><strong>Dangerous:</strong> {{ import.is_dangerous }}</p>
+    <p><strong>Stackable:</strong> {{ import.is_stackable }}</p>
+    <p><strong>Pickup Address:</strong> {{ import.pickup_address }}</p>
+    <p><strong>Date Created:</strong> {{ import.date_created }}</p>
+    <p><strong>Last Updated:</strong> {{ import.updated_at }}</p>
+</body>
+</html>

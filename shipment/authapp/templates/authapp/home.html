@@ -9,7 +9,7 @@
     <p>Your role: <strong>{{ user.role }}</strong></p>
     <div class="button-container">
         <a href="{% url 'sales_home' %}" class="dashboard-button">SALES</a>
-        <a href="#" class="dashboard-button">SHIPMENTS</a>
+        <a href="{% url 'import_list' %}" class="dashboard-button">IMPORTS</a>
         <a href="#" class="dashboard-button">EXPORTS</a>
     </div>
 </div>

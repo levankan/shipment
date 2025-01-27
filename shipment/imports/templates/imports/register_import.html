@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    {% load static %}
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Register Import</title>
+    <link rel="stylesheet" href="{% static 'css/imports/register_import.css' %}">
+</head>
+<body>
+    <div class="container">
+        <h1>Register a New Import</h1>
+        <form method="post" class="form-container">
+            {% csrf_token %}
+            {{ form.as_p }}
+            <div class="button-container">
+                <button type="submit" class="submit-button">Register</button>
+                <a href="{% url 'import_list' %}" class="back-button">Back</a>
+            </div>
+        </form>
+    </div>
+</body>
+</html>
