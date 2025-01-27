@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Delete by File</title>
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'css/sales/delete_by_file.css' %}">
+</head>
+<body>
+    <nav class="navbar">
+        <button class="button" onclick="location.href='/sales/new-sale/'">New Sale</button>
+        <button class="button" onclick="location.href='/sales/shelf/'">Shelf</button>
+        <button class="button" onclick="location.href='/sales/delete-by-file/'">Delete by File</button>
+    </nav>
+
+    <div class="container">
+        <h1 class="title">Delete Records by File</h1>
+
+        <form action="{% url 'delete_by_file' %}" method="post" enctype="multipart/form-data">
+            {% csrf_token %}
+            <label for="admin_password">Admin Password:</label>
+            <input type="password" id="admin_password" name="admin_password" required>
+        
+            <label for="file">Upload a file with "Serial/Lot" and "Batch Number" columns:</label>
+            <input type="file" id="file" name="file" accept=".xlsx, .xls" required>
+            
+            <button type="submit" class="button danger">Delete</button>
+        </form>
+        
+
+        <!-- Display any error or success messages -->
+        {% if messages %}
+        <div class="messages">
+            {% for message in messages %}
+            <p class="{{ message.tags }}">{{ message }}</p>
+            {% endfor %}
+        </div>
+        {% endif %}
+    </div>
+</body>
+</html>

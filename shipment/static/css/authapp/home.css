@@ -1,0 +1,73 @@
+/* General styles */
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    background-color: #f9f9f9; /* Light gray background */
+    color: #333;
+}
+
+/* Dashboard container */
+.dashboard {
+    text-align: center;
+    margin-top: 100px;
+    padding: 20px;
+}
+
+.dashboard h1 {
+    font-size: 2.5em;
+    color: #002664; /* Dark blue */
+    margin-bottom: 10px;
+}
+
+.dashboard p {
+    font-size: 1.2em;
+    margin-bottom: 30px;
+    color: #555; /* Subtle text color */
+}
+
+/* Button container */
+.button-container {
+    display: flex;
+    justify-content: center;
+    gap: 30px;
+    flex-wrap: wrap;
+    margin-top: 20px;
+}
+
+/* Buttons */
+.dashboard-button {
+    display: inline-block;
+    background-color: #002664; /* Dark blue */
+    color: #fff;
+    text-decoration: none;
+    padding: 15px 30px;
+    font-size: 1.2em;
+    font-weight: bold;
+    border-radius: 8px;
+    transition: all 0.3s ease;
+    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1); /* Subtle shadow */
+}
+
+.dashboard-button:hover {
+    background-color: #0046a1; /* Lighter blue on hover */
+    box-shadow: 0px 6px 10px rgba(0, 0, 0, 0.15); /* More shadow on hover */
+    transform: translateY(-2px); /* Slight upward movement */
+}
+
+.dashboard-button:active {
+    transform: translateY(1px); /* Slight downward movement on click */
+    box-shadow: 0px 3px 5px rgba(0, 0, 0, 0.1); /* Reduce shadow */
+}
+
+/* Responsive design */
+@media (max-width: 768px) {
+    .button-container {
+        flex-direction: column;
+        gap: 20px;
+    }
+
+    .dashboard-button {
+        width: 80%; /* Full-width buttons on smaller screens */
+    }
+}

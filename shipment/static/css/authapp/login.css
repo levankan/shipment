@@ -1,0 +1,102 @@
+/* Base styles */
+body {
+    font-family: 'Arial', sans-serif;
+    margin: 0;
+    padding: 0;
+    background-color: #f5f5f5; /* Light gray background */
+    color: #333; /* Dark text for readability */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+}
+
+/* Login container */
+.login-container {
+    background-color: #ffffff; /* White background for the form */
+    border: 2px solid #002664; /* Dark blue border */
+    border-radius: 10px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* Subtle shadow for depth */
+    padding: 30px;
+    width: 100%;
+    max-width: 400px;
+    text-align: center;
+}
+
+/* Heading */
+.login-container h1 {
+    font-size: 28px;
+    color: #002664; /* Dark blue text */
+    margin-bottom: 20px;
+    text-transform: uppercase;
+}
+
+/* Form styles */
+form {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+form label {
+    font-weight: bold;
+    color: #333; /* Dark gray for labels */
+    text-align: left;
+}
+
+form input[type="text"],
+form input[type="password"] {
+    border: 1px solid #002664; /* Dark blue border */
+    border-radius: 5px;
+    padding: 10px;
+    font-size: 16px;
+    color: #333; /* Dark gray text */
+    background-color: #f9f9f9; /* Light background for inputs */
+    transition: border-color 0.3s ease;
+}
+
+form input[type="text"]:focus,
+form input[type="password"]:focus {
+    border-color: #cc0000; /* Red border on focus */
+    outline: none;
+}
+
+/* Submit button */
+form button {
+    background-color: #002664; /* Dark blue background */
+    color: #ffffff; /* White text */
+    border: 2px solid #002664; /* Dark blue border */
+    border-radius: 5px;
+    font-size: 16px;
+    font-weight: bold;
+    padding: 10px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+form button:hover {
+    background-color: #cc0000; /* Red background on hover */
+    border-color: #cc0000; /* Red border on hover */
+}
+
+/* Additional links (e.g., forgot password) */
+.login-container a {
+    display: block;
+    margin-top: 10px;
+    color: #002664; /* Dark blue links */
+    text-decoration: none;
+    font-size: 14px;
+    transition: color 0.3s ease;
+}
+
+.login-container a:hover {
+    color: #cc0000; /* Red on hover */
+}
+
+/* Responsive design */
+@media (max-width: 768px) {
+    .login-container {
+        width: 90%;
+        padding: 20px;
+    }
+}

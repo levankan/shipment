@@ -1,0 +1,16 @@
+
+{% extends 'authapp/base.html' %}
+
+{% block title %}Home{% endblock %}
+
+{% block content %}
+<div class="dashboard">
+    <h1>Welcome, {{ user.username }}</h1>
+    <p>Your role: <strong>{{ user.role }}</strong></p>
+    <div class="button-container">
+        <a href="{% url 'sales_home' %}" class="dashboard-button">SALES</a>
+        <a href="#" class="dashboard-button">SHIPMENTS</a>
+        <a href="#" class="dashboard-button">EXPORTS</a>
+    </div>
+</div>
+{% endblock %}

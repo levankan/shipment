@@ -1,0 +1,245 @@
+/* Base Styles */
+body {
+    font-family: 'Roboto', sans-serif;
+    margin: 0;
+    padding: 0;
+    background-color: #f9fafc; /* Light background */
+    color: #333;
+}
+
+/* Navigation Bar */
+nav {
+    background-color: #002664;
+    padding: 15px 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border-bottom: 4px solid #cc0000;
+}
+
+nav .button {
+    background-color: #ffffff;
+    color: #002664;
+    border: 2px solid #002664;
+    border-radius: 25px;
+    font-size: 16px;
+    font-weight: bold;
+    padding: 10px 30px;
+    margin: 0 10px;
+    text-transform: uppercase;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+nav .button:hover {
+    background-color: #cc0000;
+    color: white;
+}
+
+/* Container */
+.container {
+    max-width: 1000px;
+    margin: 40px auto;
+    padding: 30px;
+    background-color: #ffffff;
+    border-radius: 15px;
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1); /* Subtle shadow */
+}
+
+.container h1 {
+    font-size: 36px;
+    text-align: center;
+    color: #002664;
+    margin-bottom: 30px;
+    text-transform: uppercase;
+    font-weight: bold;
+    letter-spacing: 2px;
+}
+
+.container h2 {
+    font-size: 24px;
+    color: #444;
+    margin-bottom: 20px;
+    font-weight: bold;
+    border-left: 5px solid #002664;
+    padding-left: 10px;
+}
+
+/* Messages */
+.message-box {
+    padding: 15px;
+    border-radius: 10px;
+    font-size: 16px;
+    font-weight: bold;
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+.message-box.success {
+    background-color: #e6f7e6;
+    color: #2e7d32;
+    border: 1px solid #81c784;
+}
+
+.message-box.error {
+    background-color: #fdecea;
+    color: #c62828;
+    border: 1px solid #e57373;
+}
+
+/* Search Form */
+.search-form {
+    display: flex;
+    justify-content: center;
+    margin-bottom: 20px;
+}
+
+.search-form input {
+    width: 60%;
+    padding: 10px;
+    border: 2px solid #ddd;
+    border-radius: 25px 0 0 25px;
+    font-size: 16px;
+    outline: none;
+}
+
+.search-form button {
+    background-color: #007bff;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    font-size: 16px;
+    cursor: pointer;
+    border-radius: 0 25px 25px 0;
+    transition: background-color 0.3s ease;
+}
+
+.search-form button:hover {
+    background-color: #0056b3;
+}
+
+/* Upload Form */
+.upload-section form {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-bottom: 30px;
+}
+
+.upload-section form .button {
+    margin-top: 10px;
+    background-color: #28a745;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    font-size: 16px;
+    cursor: pointer;
+    border-radius: 25px;
+    transition: background-color 0.3s ease;
+}
+
+.upload-section form .button:hover {
+    background-color: #218838;
+}
+
+/* Table Styles */
+.sales-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 20px;
+    font-size: 16px;
+    text-align: left;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+}
+
+.sales-table th, .sales-table td {
+    padding: 15px;
+    border: 1px solid #e0e0e0;
+}
+
+.sales-table th {
+    background-color: #002664;
+    color: white;
+    font-weight: bold;
+    text-transform: uppercase;
+}
+
+.sales-table td {
+    background-color: #f9fafc;
+    color: #333;
+}
+
+.sales-table tr:nth-child(even) td {
+    background-color: #f3f6fb; /* Subtle alternate row color */
+}
+
+.sales-table tr:hover td {
+    background-color: #e8f0fe; /* Highlight row on hover */
+    transition: background-color 0.2s ease;
+}
+
+/* Footer */
+.footer {
+    text-align: center;
+    margin-top: 40px;
+    font-size: 14px;
+    color: #666;
+}
+
+.footer p {
+    margin: 0;
+}
+
+/* Danger Button */
+.button.danger {
+    background-color: #e63946; /* Red background */
+    color: white; /* White text */
+    border: none;
+    padding: 10px 25px;
+    border-radius: 25px;
+    font-size: 16px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.button.danger:hover {
+    background-color: #d32f2f; /* Darker red on hover */
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    nav {
+        flex-direction: column;
+    }
+
+    nav .button {
+        margin-bottom: 10px;
+        width: 80%;
+    }
+
+    .search-form input {
+        width: 70%;
+    }
+
+    table {
+        font-size: 14px;
+    }
+
+    .container {
+        padding: 20px;
+    }
+}
+
+
+/* Action Buttons */
+#button_danger{
+   background-color: #f10808;
+   color: white;
+   border-radius: 5px;
+}
+
+#button_edit{
+    background-color: yellow;
+    border-radius: 5px;
+}

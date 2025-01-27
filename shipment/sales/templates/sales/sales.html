@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sales Page</title>
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'css/sales/sales.css' %}">
+    <script src="{% static 'js/sales.js' %}"></script>
+</head>
+<body>
+    <nav class="navbar">
+        <button class="button" onclick="location.href='/sales/new-sale/'">New Sale</button>
+        <button class="button" onclick="location.href='/sales/shelf/'">Shelf</button>
+        <form action="{% url 'delete_sales_database' %}" method="post" style="display: inline;">
+            {% csrf_token %}
+            <button type="submit" class="button danger">Delete Database</button>
+        </form>
+        <button class="button" onclick="location.href='/sales/delete-by-file/'">Delete by File</button>
+    </nav>
+    
+
+    <div class="container">
+        <h1 class="title">Welcome to the Sales Page</h1>
+
+        <!-- Search Section -->
+        <section class="search-section">
+            <form method="get" class="search-form">
+                <input type="text" name="search_serial" placeholder="Search by Serial Number" value="{{ search_query }}">
+                <button type="submit" class="button">Search</button>
+            </form>
+        </section>
+
+        <!-- Display Success or Error Messages -->
+        <section class="messages-section">
+            {% if message %}
+                <div class="message-box">
+                    <p class="message">{{ message }}</p>
+                </div>
+            {% endif %}
+        </section>
+
+        <!-- Display Duplicate Serial Numbers -->
+        {% if duplicate_serials %}
+        <section class="duplicates-section">
+            <h2>Duplicate Serial Numbers</h2>
+            <ul>
+                {% for serial in duplicate_serials %}
+                    <li>{{ serial }}</li>
+                {% endfor %}
+            </ul>
+        </section>
+        {% endif %}
+
+        <!-- File Upload Section -->
+        <section class="upload-section">
+            <form method="post" enctype="multipart/form-data">
+                {% csrf_token %}
+                {{ form.as_p }}
+                <button type="submit" class="button">Upload</button>
+            </form>
+        </section>
+
+        <!-- Uploaded Sales Table -->
+        <section class="sales-table-section">
+            <h2>Uploaded Sales</h2>
+            <table class="sales-table">
+                <thead>
+                    <tr>
+                        <th>LU Number</th>
+                        <th>Batch Number</th>
+                        <th>Serial/Lot</th>
+                        <th>Document Number</th>
+                        <th>QTY</th>
+                        <th>Cost</th>
+                        <th>HS Code</th>
+                        <th>Edit/Delete</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for sale in sales %}
+                    <tr>
+                        <td>{{ sale.lu_number }}</td>
+                        <td>{{ sale.batch_number }}</td>
+                        <td>{{ sale.serial_lot }}</td>
+                        <td>{{ sale.document_number }}</td>
+                        <td>{{ sale.quantity }}</td>
+                        <td>{{ sale.sales_amount_actual }}</td>
+                        <td>{{ sale.hs_code }}</td>
+                        <td>
+                            <button id="button_edit" onclick="location.href='/sales/edit/{{ sale.id }}/'">Edit</button>
+                            <form action="{% url 'delete_line' sale.id %}" method="post" style="display:inline;" onsubmit="return confirmDeletion();">
+                                {% csrf_token %}
+                                <button type="submit" id="button_danger">Delete</button>
+                            </form>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+                
+                </tbody>
+            </table>
+        </section>
+    </div>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <p>&copy; 2025 Shipment Project. All Rights Reserved.</p>
+    </footer>
+</body>
+</html>
