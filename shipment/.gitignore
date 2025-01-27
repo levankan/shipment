@@ -1,0 +1,18 @@
+# Ignore virtual environment
+shipment_env/
+
+# Ignore Python files
+*.pyc
+__pycache__/
+
+# Ignore database
+db.sqlite3
+
+# Ignore static files generated
+staticfiles/
+
+# Ignore media uploads
+media/
+
+# Ignore system files
+.DS_Store
