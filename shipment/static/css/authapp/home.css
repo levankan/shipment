@@ -71,3 +71,26 @@ body {
         width: 80%; /* Full-width buttons on smaller screens */
     }
 }
+
+
+/* Admin Panel button styling */
+.admin-panel {
+    margin-top: 20px;
+    text-align: center;
+}
+
+.admin-button {
+    display: inline-block;
+    padding: 12px 20px;
+    background-color: #cc0000; /* Red for Admin Button */
+    color: white;
+    font-size: 16px;
+    font-weight: bold;
+    text-decoration: none;
+    border-radius: 5px;
+    transition: background 0.3s ease;
+}
+
+.admin-button:hover {
+    background-color: #a00000; /* Darker Red on Hover */
+}

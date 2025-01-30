@@ -1,4 +1,3 @@
-
 {% extends 'authapp/base.html' %}
 
 {% block title %}Home{% endblock %}
@@ -7,10 +6,17 @@
 <div class="dashboard">
     <h1>Welcome, {{ user.username }}</h1>
     <p>Your role: <strong>{{ user.role }}</strong></p>
+    
     <div class="button-container">
         <a href="{% url 'sales_home' %}" class="dashboard-button">SALES</a>
         <a href="{% url 'import_list' %}" class="dashboard-button">IMPORTS</a>
-        <a href="#" class="dashboard-button">EXPORTS</a>
+        <a href="" class="dashboard-button">EXPORTS</a>
     </div>
+
+    {% if user.is_superuser %}
+    <div class="admin-panel">
+        <a href="{% url 'admin:index' %}" class="admin-button">ADMIN PANEL</a>
+    </div>
+    {% endif %}
 </div>
 {% endblock %}

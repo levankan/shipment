@@ -1,14 +1,29 @@
-from django.db import models
-
-# Create your models here.
+# imports/models.
 from django.db import models
 
 class Import(models.Model):
+    INCOTERMS_CHOICES = [
+        ('NoN', 'NoN'),
+        ('EXW', 'EXW – Ex Works'),
+        ('FCA', 'FCA – Free Carrier'),
+        ('CPT', 'CPT – Carriage Paid To'),
+        ('CIP', 'CIP – Carriage and Insurance Paid To'),
+        ('DAP', 'DAP – Delivered at Place'),
+        ('DPU', 'DPU – Delivered at Place Unloaded'),
+        ('DDP', 'DDP – Delivered Duty Paid'),
+    ]
+
+    PACKAGE_TYPE_CHOICES = [
+        ('PALLET', 'Pallet'),
+        ('BOX', 'Box'),
+        ('KIT', 'Kit'),
+    ] 
+
     unique_number = models.CharField(max_length=10, unique=True, editable=False)
     name = models.CharField(max_length=100)
     description = models.TextField(blank=True, null=True)
     country = models.CharField(max_length=100)  # Country of origin/destination
-    incoterms = models.CharField(max_length=50)  # Incoterms (e.g., EXW, FOB)
+    incoterms = models.CharField(max_length=3, choices=INCOTERMS_CHOICES, default='NoN')  # Dropdown menu for Incoterms
     operation = models.CharField(
         max_length=50,
         choices=[
@@ -16,6 +31,8 @@ class Import(models.Model):
             ('inward_processing', 'Inward Processing')
         ],
     )
+    package_type = models.CharField(max_length=10, choices=PACKAGE_TYPE_CHOICES, default='BOX')  # Added package type
+
     length = models.FloatField()  # Dimensions: Length
     width = models.FloatField()   # Dimensions: Width
     height = models.FloatField()  # Dimensions: Height
