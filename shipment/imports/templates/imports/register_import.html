@@ -10,14 +10,97 @@
 <body>
     <div class="container">
         <h1>Register a New Import</h1>
-        <form method="post" class="form-container">
+
+        <!-- Import Form -->
+        <form method="post" id="import-form">
             {% csrf_token %}
-            {{ form.as_p }}
+            {{ import_form.as_p }}
+        
+            <h2>Packages</h2>
+            <div id="package-list"></div>
+        
+            <div class="package-form">
+                <label>Package Type</label>
+                <select id="package_type">
+                    <option value="">Select</option>
+                    {% for key, value in PACKAGE_TYPE_CHOICES %}
+                        <option value="{{ key }}">{{ value }}</option>
+                    {% endfor %}
+                </select>
+
+                <label>Length</label>
+                <input type="number" id="length" step="0.01">
+
+                <label>Width</label>
+                <input type="number" id="width" step="0.01">
+
+                <label>Height</label>
+                <input type="number" id="height" step="0.01">
+
+                <label>Gross Weight</label>
+                <input type="number" id="gross_weight" step="0.01">
+
+                <button type="button" onclick="addPackage()">Add Package</button>
+            </div>
+        
+            <!-- ✅ Hidden field to send package data -->
+            <input type="hidden" name="packages" id="packages-json">
+        
             <div class="button-container">
-                <button type="submit" class="submit-button">Register</button>
+                <button type="submit" class="submit-button">Register Import</button>
                 <a href="{% url 'import_list' %}" class="back-button">Back</a>
             </div>
         </form>
-    </div>
+        
+        <script>
+            let packages = [];
+
+            function addPackage() {
+                let packageType = document.getElementById("package_type").value;
+                let length = document.getElementById("length").value;
+                let width = document.getElementById("width").value;
+                let height = document.getElementById("height").value;
+                let grossWeight = document.getElementById("gross_weight").value;
+
+                if (!packageType || !length || !width || !height || !grossWeight) {
+                    alert("⚠️ All package fields are required!");
+                    return;
+                }
+
+                let packageData = {
+                    packageType: packageType,
+                    length: parseFloat(length),
+                    width: parseFloat(width),
+                    height: parseFloat(height),
+                    grossWeight: parseFloat(grossWeight)
+                };
+
+                packages.push(packageData);
+                console.log("✅ Package added:", packageData);  // Debugging
+
+                // ✅ Update hidden input field before form submission
+                document.getElementById("packages-json").value = JSON.stringify(packages);
+                console.log("🔍 Updated Hidden Field:", document.getElementById("packages-json").value);  // Debugging
+
+                // ✅ Display entered packages
+                let packageList = document.getElementById("package-list");
+                let packageItem = document.createElement("div");
+                packageItem.innerHTML = `<p>${packageType} - ${length}x${width}x${height} - ${grossWeight}kg</p>`;
+                packageList.appendChild(packageItem);
+
+                // ✅ Clear fields after adding a package
+                document.getElementById("package_type").value = "";
+                document.getElementById("length").value = "";
+                document.getElementById("width").value = "";
+                document.getElementById("height").value = "";
+                document.getElementById("gross_weight").value = "";
+            }
+
+            // ✅ Ensure packages don't persist when refreshing the page
+            window.addEventListener("beforeunload", function () {
+                packages = [];
+                document.getElementById("packages-json").value = "";
+            });
+        </script>
 </body>
 </html>

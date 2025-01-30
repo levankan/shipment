@@ -1,4 +1,3 @@
-# imports/models.
 from django.db import models
 
 class Import(models.Model):
@@ -13,17 +12,17 @@ class Import(models.Model):
         ('DDP', 'DDP – Delivered Duty Paid'),
     ]
 
-    PACKAGE_TYPE_CHOICES = [
-        ('PALLET', 'Pallet'),
-        ('BOX', 'Box'),
-        ('KIT', 'Kit'),
+    PACKAGE_TYPE = [
+        ('PALLET', 'PALLET'), 
+        ('BOX', 'BOX'), 
+        ('KIT', 'KIT'),
     ] 
 
     unique_number = models.CharField(max_length=10, unique=True, editable=False)
     name = models.CharField(max_length=100)
     description = models.TextField(blank=True, null=True)
-    country = models.CharField(max_length=100)  # Country of origin/destination
-    incoterms = models.CharField(max_length=3, choices=INCOTERMS_CHOICES, default='NoN')  # Dropdown menu for Incoterms
+    country = models.CharField(max_length=100)
+    incoterms = models.CharField(max_length=3, choices=INCOTERMS_CHOICES)
     operation = models.CharField(
         max_length=50,
         choices=[
@@ -31,21 +30,14 @@ class Import(models.Model):
             ('inward_processing', 'Inward Processing')
         ],
     )
-    package_type = models.CharField(max_length=10, choices=PACKAGE_TYPE_CHOICES, default='BOX')  # Added package type
-
-    length = models.FloatField()  # Dimensions: Length
-    width = models.FloatField()   # Dimensions: Width
-    height = models.FloatField()  # Dimensions: Height
-    gross_weight = models.FloatField()  # Gross weight in kg
-    is_dangerous = models.BooleanField(default=False)  # Is it dangerous?
-    is_stackable = models.BooleanField(default=True)  # Is it stackable?
-    pickup_address = models.TextField()  # Address for pickup
+    is_dangerous = models.BooleanField(default=False)
+    is_stackable = models.BooleanField(default=True)
+    pickup_address = models.TextField()
     date_created = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 
     def save(self, *args, **kwargs):
         if not self.unique_number:
-            # Generate a unique number in the format 'IMP00001'
             last_import = Import.objects.all().order_by('id').last()
             if last_import:
                 number = int(last_import.unique_number.replace("IMP", "")) + 1
@@ -56,3 +48,14 @@ class Import(models.Model):
 
     def __str__(self):
         return self.unique_number
+
+class Package(models.Model):
+    import_instance = models.ForeignKey(Import, related_name="packages", on_delete=models.CASCADE)
+    package_type = models.CharField(max_length=20, choices=Import.PACKAGE_TYPE)
+    length = models.FloatField()
+    width = models.FloatField()
+    height = models.FloatField()
+    gross_weight = models.FloatField()
+
+    def __str__(self):
+        return f"{self.package_type} - {self.length}x{self.width}x{self.height} - {self.gross_weight}kg"

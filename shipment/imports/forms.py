@@ -1,5 +1,5 @@
 from django import forms
-from .models import Import
+from .models import Import, Package
 
 class ImportForm(forms.ModelForm):
     class Meta:
@@ -10,20 +10,24 @@ class ImportForm(forms.ModelForm):
             'country',
             'incoterms',
             'operation',
-            'package_type', 
-            'length',
-            'width',
-            'height',
-            'gross_weight',
             'is_dangerous',
             'is_stackable',
             'pickup_address',
         ]
-        widgets = {
-            'description': forms.Textarea(attrs={'rows': 3}),
-            'pickup_address': forms.Textarea(attrs={'rows': 3}),
-        }
 
-    # Ensure incoterms and package type fields are dropdowns
-    incoterms = forms.ChoiceField(choices=Import.INCOTERMS_CHOICES, widget=forms.Select())
-    package_type = forms.ChoiceField(choices=Import.PACKAGE_TYPE_CHOICES, widget=forms.Select())
+    incoterms = forms.ChoiceField(
+        choices=[('', 'Please select an option')] + Import.INCOTERMS_CHOICES,
+        widget=forms.Select(),
+        error_messages={'required': 'Please select an item from the list.'}
+    )
+
+class PackageForm(forms.ModelForm):
+    class Meta:
+        model = Package
+        fields = ['package_type', 'length', 'width', 'height', 'gross_weight']
+    
+    package_type = forms.ChoiceField(
+        choices=[('', 'Please select an option')] + Import.PACKAGE_TYPE,
+        widget=forms.Select(),
+        required=False  # ❗ Make this optional so it's not required on Import submission
+    )
