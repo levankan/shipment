@@ -1,16 +1,17 @@
 from django import forms
-from .models import Import, Package, PACKAGE_TYPE_CHOICES, INCOTERMS_CHOICES  # ✅ Import `INCOTERMS_CHOICES`
+from .models import Import, Package, PACKAGE_TYPE_CHOICES, INCOTERMS_CHOICES, CURRENCY_CHOICES  # ✅ Import CURRENCY_CHOICES
 
 class ImportForm(forms.ModelForm):
     class Meta:
         model = Import
         fields = [
             'vendor_name', 'description', 'country', 'incoterms', 'operation',
-            'is_dangerous', 'is_stackable', 'pickup_address'
+            'is_dangerous', 'is_stackable', 'pickup_address', 'currency' 
         ]
 
-    # ✅ Now this will work
+    # ✅ Now this will work correctly
     incoterms = forms.ChoiceField(choices=INCOTERMS_CHOICES, widget=forms.Select())
+    currency = forms.ChoiceField(choices=CURRENCY_CHOICES, widget=forms.Select())  # ✅ Dropdown for currency
 
 class PackageForm(forms.ModelForm):
     class Meta:
