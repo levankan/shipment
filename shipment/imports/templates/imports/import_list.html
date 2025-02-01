@@ -16,17 +16,29 @@
                     <th>Import Number</th>
                     <th>Name</th>
                     <th>Country</th>
+                    <th>Status</th>
                     <th>Actions</th>
                 </tr>
             </thead>
             <tbody>
                 {% for import in imports %}
-                    <tr>
+                    <tr id="import-{{ import.unique_number }}">
                         <td><a href="{% url 'import_detail' import.unique_number %}">{{ import.unique_number }}</a></td>
                         <td>{{ import.name }}</td>
                         <td>{{ import.country }}</td>
+                        <td class="status-cell">{{ import.status }}</td>
                         <td>
                             <a href="{% url 'edit_import' import.unique_number %}" class="edit-button">Edit</a>
+                            
+                            <!-- Finish Button -->
+                            <button class="finish-button"
+                                    data-unique-number="{{ import.unique_number }}"
+                                    {% if import.status|lower == 'finished' %}disabled{% endif %}>
+                                Finish
+                            </button>
+
+
+                            <!-- Delete Form -->
                             <form action="{% url 'delete_import' import.unique_number %}" method="post" class="delete-form">
                                 {% csrf_token %}
                                 <button type="submit" class="delete-button">Delete</button>
@@ -35,7 +47,7 @@
                     </tr>
                 {% empty %}
                     <tr>
-                        <td colspan="4">No imports registered yet.</td>
+                        <td colspan="5">No imports registered yet.</td>
                     </tr>
                 {% endfor %}
             </tbody>
@@ -45,5 +57,35 @@
             <a href="{% url 'register_import' %}" class="add-button">Register New Import</a>
         </div>
     </div>
+
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            let finishButtons = document.querySelectorAll(".finish-button");
+
+            finishButtons.forEach(button => {
+                button.addEventListener("click", function() {
+                    let uniqueNumber = this.getAttribute("data-unique-number");
+
+                    fetch(`/imports/${uniqueNumber}/finish/`, {
+                        method: "POST",
+                        headers: {
+                            "X-CSRFToken": "{{ csrf_token }}",
+                            "Content-Type": "application/json"
+                        },
+                        body: JSON.stringify({})
+                    })
+                    .then(response => response.json())
+                    .then(data => {
+                        if (data.success) {
+                            let row = document.getElementById(`import-${uniqueNumber}`);
+                            row.querySelector(".status-cell").textContent = "Finished";
+                            this.disabled = true;
+                        }
+                    });
+                });
+            });
+        });
+    </script>
+
 </body>
 </html>

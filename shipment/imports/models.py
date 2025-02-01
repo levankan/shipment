@@ -18,7 +18,15 @@ INCOTERMS_CHOICES = [
     ('DDP', 'DDP – Delivered Duty Paid'),
 ]
 
+
 class Import(models.Model):
+
+    STATUS_CHOICES = [
+    ('Active', 'Active'),
+    ('Finished', 'Finished'),
+    ]
+
+
     unique_number = models.CharField(max_length=10, unique=True, editable=False)
     name = models.CharField(max_length=100)
     description = models.TextField(blank=True, null=True)
@@ -31,6 +39,7 @@ class Import(models.Model):
     is_dangerous = models.BooleanField(default=False)
     is_stackable = models.BooleanField(default=True)
     pickup_address = models.TextField()
+    status = models.CharField(max_length=10, choices=STATUS_CHOICES, default='Active')
     date_created = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 

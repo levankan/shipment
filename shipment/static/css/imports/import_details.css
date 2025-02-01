@@ -1,3 +1,4 @@
+/* General Page Styles */
 body {
     font-family: Arial, sans-serif;
     background-color: #f8f9fa;
@@ -5,18 +6,30 @@ body {
     padding: 20px;
 }
 
+/* Main Container */
 .container {
-    max-width: 800px;
+    max-width: 900px;
     margin: auto;
     background-color: white;
-    padding: 20px;
+    padding: 25px;
     border-radius: 8px;
     box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
 }
 
+/* Headings */
 h1, h2 {
     text-align: center;
     color: #333;
+    margin-bottom: 15px;
+}
+
+/* Import Information */
+.import-info {
+    background-color: #f9f9f9;
+    padding: 15px;
+    border-radius: 8px;
+    margin-bottom: 20px;
+    box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.1);
 }
 
 .import-info p {
@@ -25,40 +38,76 @@ h1, h2 {
     margin: 8px 0;
 }
 
-.package-table {
+/* Package Table */
+.package-table, .details-table {
     width: 100%;
     border-collapse: collapse;
-    margin-top: 20px;
+    margin-top: 15px;
+    font-size: 14px;
 }
 
-.package-table th, .package-table td {
+.package-table th, .package-table td,
+.details-table th, .details-table td {
     border: 1px solid #ddd;
-    padding: 8px;
+    padding: 10px;
     text-align: center;
 }
 
-.package-table th {
+.package-table th, .details-table th {
     background-color: #007bff;
     color: white;
 }
 
-.package-table tr:nth-child(even) {
+.package-table tr:nth-child(even),
+.details-table tr:nth-child(even) {
     background-color: #f2f2f2;
 }
 
+.package-table tr:hover,
+.details-table tr:hover {
+    background-color: #ddd;
+}
+
+/* Button Container */
 .button-container {
     text-align: center;
     margin-top: 20px;
 }
 
+/* Back Button */
 .back-button {
     text-decoration: none;
     background-color: #007bff;
     color: white;
-    padding: 10px 20px;
+    padding: 12px 18px;
     border-radius: 5px;
+    font-weight: bold;
+    display: inline-block;
+    transition: background 0.3s ease;
 }
 
 .back-button:hover {
     background-color: #0056b3;
+}
+
+/* Responsive Design */
+@media screen and (max-width: 768px) {
+    .container {
+        width: 95%;
+        padding: 15px;
+    }
+
+    .package-table, .details-table {
+        font-size: 12px;
+    }
+
+    .package-table th, .package-table td,
+    .details-table th, .details-table td {
+        padding: 6px;
+    }
+
+    .back-button {
+        padding: 10px 16px;
+        font-size: 14px;
+    }
 }

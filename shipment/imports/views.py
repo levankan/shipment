@@ -84,16 +84,14 @@ def import_list(request):
 @login_required
 def import_detail(request, unique_number):
     import_instance = get_object_or_404(Import, unique_number=unique_number)
-    return render(request, 'imports/import_detail.html', {'import': import_instance})
+    packages = Package.objects.filter(import_instance=import_instance)
+    import_details = ImportDetail.objects.filter(import_instance=import_instance)  # ✅ Fetch Excel data
 
-
-@login_required
-def import_detail(request, unique_number):
-    import_instance = get_object_or_404(Import, unique_number=unique_number)
-    packages = Package.objects.filter(import_instance=import_instance)  # Fetch packages
-    return render(request, 'imports/import_detail.html', {'import': import_instance, 'packages': packages})
-
-
+    return render(request, 'imports/import_detail.html', {
+        'import': import_instance,
+        'packages': packages,
+        'import_details': import_details  # ✅ Pass Excel data to the template
+    })
 
 
 
@@ -127,6 +125,12 @@ def delete_import(request, unique_number):
 
 
 
+@login_required
+def finish_import(request, unique_number):
+    import_instance = get_object_or_404(Import, unique_number=unique_number)
+    import_instance.status = 'Finished'
+    import_instance.save()
+    return JsonResponse({'success': True, 'status': import_instance.status})
 
 
 

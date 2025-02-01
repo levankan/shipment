@@ -9,6 +9,11 @@
 </head>
 <body>
     <div class="container">
+        <h2>Status: <span id="import-status">{{ import.status }}</span></h2>
+        <button id="finish-btn" data-unique-number="{{ import.unique_number }}"
+                {% if import.status == 'Finished' %}disabled{% endif %}>
+            Finish Import
+        </button>
         <h1> {{ import.unique_number }} - {{ import.name }}</h1>
 
         <div class="import-info">
@@ -51,6 +56,62 @@
         <div class="button-container">
             <a href="{% url 'import_list' %}" class="back-button">Back to Imports</a>
         </div>
+
+        <h2>Import Details</h2>
+        {% if import_details %}
+        <table class="details-table">
+            <thead>
+                <tr>
+                    <th>PO Number</th>
+                    <th>Line Number</th>
+                    <th>Item Number</th>
+                    <th>Description</th>
+                    <th>Quantity</th>
+                    <th>Unit Cost</th>
+                    <th>Line Cost</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for detail in import_details %}
+                    <tr>
+                        <td>{{ detail.po_number }}</td>
+                        <td>{{ detail.line_number }}</td>
+                        <td>{{ detail.item_number }}</td>
+                        <td>{{ detail.description_eng }}</td>
+                        <td>{{ detail.quantity }}</td>
+                        <td>${{ detail.unit_cost|floatformat:2 }}</td>
+                        <td>${{ detail.line_cost|floatformat:2 }}</td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+    </table>
+{% else %}
+    <p>No details uploaded yet.</p>
+{% endif %}
+
     </div>
+
+
+    <script>
+        document.getElementById("finish-btn").addEventListener("click", function() {
+            let uniqueNumber = this.getAttribute("data-unique-number");
+    
+            fetch(`/imports/${uniqueNumber}/finish/`, {
+                method: "POST",
+                headers: {
+                    "X-CSRFToken": "{{ csrf_token }}",
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify({})
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    document.getElementById("import-status").textContent = "Finished";
+                    this.disabled = true;
+                }
+            });
+        });
+    </script>
 </body>
 </html>
