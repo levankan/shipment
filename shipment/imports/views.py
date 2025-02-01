@@ -4,24 +4,15 @@ import json
 from django.shortcuts import render, redirect
 from django.contrib.auth.decorators import login_required
 from .models import Import, Package
-from .forms import ImportForm
 import pandas as pd
 from .models import Import, Package, ImportDetail
 from django.http import JsonResponse
 from django.core.files.storage import FileSystemStorage
 from .models import ImportDetail, Import
-
-
-
-
-from django.shortcuts import render, redirect, get_object_or_404
-import json
-from django.contrib.auth.decorators import login_required
 from .models import Import, Package, ImportDetail, PACKAGE_TYPE_CHOICES
 from .forms import ImportForm, PackageForm
-import pandas as pd
-from django.http import JsonResponse
-from django.core.files.storage import FileSystemStorage
+
+
 
 
 
@@ -33,7 +24,10 @@ def register_import(request):
         if import_form.is_valid():
             new_import = import_form.save()
 
-            # ✅ Extract package data from hidden field
+            # Retrieve import number
+            import_number = new_import.unique_number  
+
+            # Save package data
             package_data_json = request.POST.get('packages', '[]')
             package_data = json.loads(package_data_json) if package_data_json else []
 
@@ -47,15 +41,38 @@ def register_import(request):
                     gross_weight=float(package['grossWeight'])
                 )
 
+            # Save excel data
+            excel_data_json = request.POST.get('excel_data', '[]')
+            excel_data = json.loads(excel_data_json) if excel_data_json else []
+
+            for record in excel_data:
+                ImportDetail.objects.create(
+                    import_instance=new_import,
+                    po_number=record['poNumber'],
+                    line_number=int(record['lineNumber']),
+                    item_number=record['itemNumber'],
+                    description_eng=record['descriptionEng'],
+                    quantity=int(record['quantity']),
+                    unit_cost=float(record['unitCost']),
+                    line_cost=float(record['lineCost']),
+                )
+
             return redirect('import_list')
 
     else:
         import_form = ImportForm()
 
+        # Generate new Import Number
+        last_import = Import.objects.all().order_by('id').last()
+        new_number = int(last_import.unique_number.replace("IMP", "")) + 1 if last_import else 1
+        import_number = f"IMP{str(new_number).zfill(5)}"
+
     return render(request, 'imports/register_import.html', {
         'import_form': import_form,
-        'PACKAGE_TYPE_CHOICES': PACKAGE_TYPE_CHOICES
+        'import_number': import_number,  # ✅ Pass import number to the template
+        'PACKAGE_TYPE_CHOICES': PACKAGE_TYPE_CHOICES  # ✅ Pass package type choices
     })
+
 
 
 

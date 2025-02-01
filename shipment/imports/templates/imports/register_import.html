@@ -11,49 +11,48 @@
 <body>
     <div class="container">
         <h1>Register a New Import</h1>
+        <!-- ✅ Show and Store Import Number -->
+        <h4>Import Number: <span id="display-import-number">{{ import_number }}</span></h4>
+        <input type="hidden" name="import_number" id="import_number" value="{{ import_number }}">
 
         <!-- Import Form -->
         <form method="post" id="import-form">
             {% csrf_token %}
             {{ import_form.as_p }}
-
-            <!-- Package Section -->
+        
+            
+        
             <h2>Packages</h2>
             <div id="package-list"></div>
-
+        
             <div class="package-form">
                 <label>Package Type</label>
                 <select id="package_type">
-                    <option value="">Select</option>
+                    <option value="">Select Package Type</option>
                     {% for key, value in PACKAGE_TYPE_CHOICES %}
                         <option value="{{ key }}">{{ value }}</option>
                     {% endfor %}
-                </select>
-
+                </select>                          
+        
                 <label>Length</label>
-                <input type="number" id="length" step="0.01">
-
+                <input type="number" id="length" step="0.01" min="0">
+        
                 <label>Width</label>
-                <input type="number" id="width" step="0.01">
-
+                <input type="number" id="width" step="0.01" min="0">
+        
                 <label>Height</label>
-                <input type="number" id="height" step="0.01">
-
+                <input type="number" id="height" step="0.01" min="0">
+        
                 <label>Gross Weight</label>
-                <input type="number" id="gross_weight" step="0.01">
-
+                <input type="number" id="gross_weight" step="0.01" min="0">
+        
                 <button type="button" onclick="addPackage()">Add Package</button>
             </div>
-
-            <!-- ✅ Hidden fields to store JSON data -->
-            <input type="hidden" name="packages" id="packages-json">
-            <input type="hidden" name="excel_data" id="excel-data-json"> <!-- Store Excel data -->
-
+        
             <h2>Upload Details</h2>
             <input type="file" id="uploadExcel" accept=".xls,.xlsx">
             <button type="button" onclick="handleFileUpload()">Upload Details</button>
-
-            <!-- ✅ Display Uploaded Data Here -->
+        
             <div class="table-container">
                 <table id="excelTable">
                     <thead>
@@ -71,29 +70,33 @@
                     <tbody></tbody>
                 </table>
             </div>
-
+        
+            <!-- ✅ Store Excel Data Before Submitting -->
+            <input type="hidden" name="packages" id="packages-json">
+            <input type="hidden" name="excel_data" id="excel-data-json">
+        
             <div class="button-container">
                 <button type="submit" class="submit-button">Register Import</button>
                 <a href="{% url 'import_list' %}" class="back-button">Back</a>
             </div>
         </form>
-
+        
         <script>
             let packages = [];
             let excelData = [];
-
+        
             function addPackage() {
                 let packageType = document.getElementById("package_type").value;
                 let length = document.getElementById("length").value;
                 let width = document.getElementById("width").value;
                 let height = document.getElementById("height").value;
                 let grossWeight = document.getElementById("gross_weight").value;
-
+        
                 if (!packageType || !length || !width || !height || !grossWeight) {
                     alert("⚠️ All package fields are required!");
                     return;
                 }
-
+        
                 let packageData = {
                     packageType: packageType,
                     length: parseFloat(length),
@@ -101,31 +104,31 @@
                     height: parseFloat(height),
                     grossWeight: parseFloat(grossWeight)
                 };
-
+        
                 packages.push(packageData);
                 document.getElementById("packages-json").value = JSON.stringify(packages);
-
+        
                 let packageList = document.getElementById("package-list");
                 let packageItem = document.createElement("div");
                 packageItem.innerHTML = `<p>${packageType} - ${length}x${width}x${height} - ${grossWeight}kg</p>`;
                 packageList.appendChild(packageItem);
-
+        
                 document.getElementById("package_type").value = "";
                 document.getElementById("length").value = "";
                 document.getElementById("width").value = "";
                 document.getElementById("height").value = "";
                 document.getElementById("gross_weight").value = "";
             }
-
+        
             function handleFileUpload() {
                 let fileInput = document.getElementById("uploadExcel");
                 let file = fileInput.files[0];
-
+        
                 if (!file) {
                     alert("⚠️ Please select an Excel file!");
                     return;
                 }
-
+        
                 let reader = new FileReader();
                 reader.onload = function(e) {
                     let data = new Uint8Array(e.target.result);
@@ -133,24 +136,24 @@
                     let sheetName = workbook.SheetNames[0];
                     let sheet = workbook.Sheets[sheetName];
                     let jsonData = XLSX.utils.sheet_to_json(sheet, { header: 1 });
-
+        
                     displayExcelData(jsonData);
                 };
                 reader.readAsArrayBuffer(file);
             }
-
+        
             function displayExcelData(data) {
                 let tableBody = document.querySelector("#excelTable tbody");
                 tableBody.innerHTML = "";
-
+        
                 if (data.length <= 1) {
                     alert("⚠️ No valid data found in the Excel file!");
                     return;
                 }
-
-                let importNumber = "IMP" + String(new Date().getTime()).slice(-5); // Generate temp import number
+        
+                let importNumber = document.getElementById("import_number").value; // ✅ Get actual import number
                 excelData = [];
-
+        
                 for (let i = 1; i < data.length; i++) {
                     let rowData = {
                         importNumber: importNumber,
@@ -162,9 +165,9 @@
                         unitCost: data[i][5] || 0,
                         lineCost: data[i][6] || 0,
                     };
-
+        
                     excelData.push(rowData);
-
+        
                     let row = document.createElement("tr");
                     row.innerHTML = `
                         <td>${rowData.importNumber}</td>
@@ -178,10 +181,11 @@
                     `;
                     tableBody.appendChild(row);
                 }
-
+        
                 document.getElementById("excel-data-json").value = JSON.stringify(excelData);
             }
         </script>
+        
     </div>
 </body>
 </html>
