@@ -10,18 +10,40 @@
 <body>
     <div class="container">
         <h1>List of Registered Imports</h1>
+        <table>
+            <thead>
+                <tr>
+                    <th>Import Number</th>
+                    <th>Name</th>
+                    <th>Country</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for import in imports %}
+                    <tr>
+                        <td><a href="{% url 'import_detail' import.unique_number %}">{{ import.unique_number }}</a></td>
+                        <td>{{ import.name }}</td>
+                        <td>{{ import.country }}</td>
+                        <td>
+                            <a href="{% url 'edit_import' import.unique_number %}" class="edit-button">Edit</a>
+                            <form action="{% url 'delete_import' import.unique_number %}" method="post" class="delete-form">
+                                {% csrf_token %}
+                                <button type="submit" class="delete-button">Delete</button>
+                            </form>
+                        </td>
+                    </tr>
+                {% empty %}
+                    <tr>
+                        <td colspan="4">No imports registered yet.</td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+
         <div class="button-container">
-            <a href="{% url 'register_import' %}" class="button">Register New Import</a>
+            <a href="{% url 'register_import' %}" class="add-button">Register New Import</a>
         </div>
-        <ul class="import-list">
-            {% for import in imports %}
-                <li>
-                    <a href="{% url 'import_detail' import.unique_number %}" class="import-link">
-                        {{ import.unique_number }} - {{ import.name }}
-                    </a>
-                </li>
-            {% endfor %}
-        </ul>
     </div>
 </body>
 </html>

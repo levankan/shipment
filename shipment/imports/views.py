@@ -5,17 +5,25 @@ from django.shortcuts import render, redirect
 from django.contrib.auth.decorators import login_required
 from .models import Import, Package
 from .forms import ImportForm
+import pandas as pd
+from .models import Import, Package, ImportDetail
+from django.http import JsonResponse
+from django.core.files.storage import FileSystemStorage
+from .models import ImportDetail, Import
 
+
+
+
+from django.shortcuts import render, redirect, get_object_or_404
 import json
-from django.shortcuts import render, redirect
 from django.contrib.auth.decorators import login_required
-from .models import Import, Package
-from .forms import ImportForm
+from .models import Import, Package, ImportDetail, PACKAGE_TYPE_CHOICES
+from .forms import ImportForm, PackageForm
+import pandas as pd
+from django.http import JsonResponse
+from django.core.files.storage import FileSystemStorage
 
-from django.shortcuts import render, redirect
-from django.contrib.auth.decorators import login_required
-from .models import Import, Package
-from .forms import ImportForm
+
 
 @login_required
 def register_import(request):
@@ -23,30 +31,21 @@ def register_import(request):
         import_form = ImportForm(request.POST)
 
         if import_form.is_valid():
-            new_import = import_form.save()  # ✅ Save Import First
+            new_import = import_form.save()
 
             # ✅ Extract package data from hidden field
-            package_data_json = request.POST.get('packages', '[]')  # Default to empty list if missing
-            print(f"🔍 Received JSON: {package_data_json}")  # Debugging
+            package_data_json = request.POST.get('packages', '[]')
+            package_data = json.loads(package_data_json) if package_data_json else []
 
-            try:
-                package_data = json.loads(package_data_json)  # Convert JSON string to Python dictionary
-
-                if package_data:  # ✅ Check if packages exist
-                    for package in package_data:
-                        Package.objects.create(
-                            import_instance=new_import,
-                            package_type=package['packageType'],
-                            length=float(package['length']),
-                            width=float(package['width']),
-                            height=float(package['height']),
-                            gross_weight=float(package['grossWeight'])
-                        )
-                    print(f"✅ {len(package_data)} Packages saved!")  # Debugging
-                else:
-                    print("⚠️ No packages received!")  # Debugging
-            except json.JSONDecodeError as e:
-                print(f"🚨 JSON Error: {e}")  # Debugging
+            for package in package_data:
+                Package.objects.create(
+                    import_instance=new_import,
+                    package_type=package['packageType'],
+                    length=float(package['length']),
+                    width=float(package['width']),
+                    height=float(package['height']),
+                    gross_weight=float(package['grossWeight'])
+                )
 
             return redirect('import_list')
 
@@ -55,9 +54,8 @@ def register_import(request):
 
     return render(request, 'imports/register_import.html', {
         'import_form': import_form,
-        'PACKAGE_TYPE_CHOICES': Import.PACKAGE_TYPE  # ✅ Pass package type choices to the template
+        'PACKAGE_TYPE_CHOICES': PACKAGE_TYPE_CHOICES
     })
-
 
 
 
@@ -78,3 +76,90 @@ def import_detail(request, unique_number):
     packages = Package.objects.filter(import_instance=import_instance)  # Fetch packages
     return render(request, 'imports/import_detail.html', {'import': import_instance, 'packages': packages})
 
+
+
+
+
+
+
+@login_required
+def edit_import(request, unique_number):
+    import_instance = get_object_or_404(Import, unique_number=unique_number)
+
+    if request.method == "POST":
+        form = ImportForm(request.POST, instance=import_instance)
+        if form.is_valid():
+            form.save()
+            return redirect('import_list')
+    else:
+        form = ImportForm(instance=import_instance)
+
+    return render(request, 'imports/edit_import.html', {'form': form, 'import': import_instance})
+
+
+
+@login_required
+def delete_import(request, unique_number):
+    import_instance = get_object_or_404(Import, unique_number=unique_number)
+
+    if request.method == "POST":
+        import_instance.delete()
+        return redirect('import_list')
+
+    return render(request, 'imports/delete_import.html', {'import': import_instance})
+
+
+
+
+
+
+
+
+
+
+
+
+@login_required
+def upload_excel(request):
+    if request.method == "POST" and request.FILES.get("excel_file"):
+        excel_file = request.FILES["excel_file"]
+        
+        # ✅ Save the file temporarily
+        fs = FileSystemStorage()
+        filename = fs.save(excel_file.name, excel_file)
+        file_path = fs.path(filename)
+
+        try:
+            # ✅ Read Excel file
+            df = pd.read_excel(file_path)
+
+            # ✅ Ensure required columns exist
+            required_columns = ["PO Number", "Line Number", "Item Number", "Description Eng", "Quantity", "Unit Cost", "Line Cost"]
+            if not all(col in df.columns for col in required_columns):
+                return JsonResponse({"error": "Invalid file format. Please upload an Excel file with the correct columns."}, status=400)
+
+            # ✅ Get the latest Import instance (or adjust logic as needed)
+            latest_import = Import.objects.last()
+            if not latest_import:
+                return JsonResponse({"error": "No Import record found! Register an import first."}, status=400)
+
+            # ✅ Save each row to the database
+            records = []
+            for _, row in df.iterrows():
+                record = ImportDetail.objects.create(
+                    import_instance=latest_import,
+                    po_number=row["PO Number"],
+                    line_number=int(row["Line Number"]),
+                    item_number=row["Item Number"],
+                    description_eng=row["Description Eng"],
+                    quantity=int(row["Quantity"]),
+                    unit_cost=float(row["Unit Cost"]),
+                    line_cost=float(row["Line Cost"]),
+                )
+                records.append(record)
+
+            return JsonResponse({"success": f"{len(records)} records uploaded successfully!"})
+        except Exception as e:
+            return JsonResponse({"error": str(e)}, status=500)
+
+    return JsonResponse({"error": "No file uploaded!"}, status=400)

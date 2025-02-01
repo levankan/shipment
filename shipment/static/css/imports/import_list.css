@@ -1,72 +1,118 @@
-/* General body styles */
+/* General Page Styling */
 body {
-    font-family: 'Arial', sans-serif;
-    background-color: #f9f9f9;
-    color: #333;
+    font-family: Arial, sans-serif;
+    background-color: #f8f9fa;
     margin: 0;
-    padding: 0;
-}
-
-/* Container for the content */
-.container {
-    max-width: 800px;
-    margin: 20px auto;
     padding: 20px;
-    background-color: #fff;
+}
+
+.container {
+    max-width: 900px;
+    margin: auto;
+    padding: 20px;
+    background-color: white;
     border-radius: 8px;
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
 }
 
-/* Header styles */
-h1 {
-    text-align: center;
-    color: #333;
-    margin-bottom: 20px;
-    font-size: 28px;
+/* Table Styling */
+table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 20px;
+    background-color: #ffffff;
+    border-radius: 8px;
+    overflow: hidden;
 }
 
-/* Button container and button styles */
-.button-container {
-    text-align: center;
-    margin-bottom: 20px;
+th, td {
+    border: 1px solid #ddd;
+    padding: 12px;
+    text-align: left;
 }
 
-.button {
-    display: inline-block;
-    background-color: #4CAF50;
+th {
+    background-color: #007bff;
     color: white;
+    text-transform: uppercase;
+}
+
+td a {
     text-decoration: none;
-    padding: 10px 20px;
-    border-radius: 5px;
-    font-size: 16px;
+    color: #007bff;
     font-weight: bold;
-    transition: background-color 0.3s ease;
 }
 
-.button:hover {
-    background-color: #45a049;
+td a:hover {
+    text-decoration: underline;
 }
 
-/* List styles */
-.import-list {
-    list-style-type: none;
-    padding: 0;
-}
-
-.import-list li {
-    margin: 10px 0;
-    font-size: 18px;
-}
-
-.import-link {
+/* Action Buttons */
+.edit-button, .delete-button {
+    display: inline-block;
+    padding: 6px 12px;
+    margin: 2px;
+    border-radius: 5px;
+    text-align: center;
     text-decoration: none;
-    color: #333;
-    padding: 8px 12px;
-    border-radius: 4px;
-    transition: background-color 0.3s ease, color 0.3s ease;
+    font-weight: bold;
+    border: none;
+    cursor: pointer;
 }
 
-.import-link:hover {
-    background-color: #f0f0f0;
-    color: #4CAF50;
+.edit-button {
+    background-color: #28a745;
+    color: white;
+}
+
+.edit-button:hover {
+    background-color: #218838;
+}
+
+.delete-button {
+    background-color: #dc3545;
+    color: white;
+}
+
+.delete-button:hover {
+    background-color: #c82333;
+}
+
+/* Delete Form */
+.delete-form {
+    display: inline-block;
+}
+
+/* Register Button */
+.add-button {
+    display: block;
+    width: 200px;
+    text-align: center;
+    margin: 20px auto;
+    padding: 10px;
+    background-color: #17a2b8;
+    color: white;
+    font-size: 16px;
+    text-decoration: none;
+    border-radius: 5px;
+}
+
+.add-button:hover {
+    background-color: #138496;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    table {
+        font-size: 14px;
+    }
+
+    th, td {
+        padding: 10px;
+    }
+
+    .edit-button, .delete-button {
+        font-size: 12px;
+        padding: 5px 10px;
+    }
 }

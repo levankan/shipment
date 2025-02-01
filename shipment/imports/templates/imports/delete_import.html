@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    {% load static %}
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Delete Import</title>
+    <link rel="stylesheet" href="{% static 'css/imports/register_import.css' %}">
+</head>
+<body>
+    <div class="container">
+        <h1>Are you sure you want to delete {{ import.unique_number }}?</h1>
+        <p>This action cannot be undone.</p>
+        <form method="post">
+            {% csrf_token %}
+            <button type="submit" class="delete-button">Yes, Delete</button>
+            <a href="{% url 'import_list' %}" class="back-button">Cancel</a>
+        </form>
+    </div>
+</body>
+</html>

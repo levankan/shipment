@@ -9,7 +9,7 @@
 </head>
 <body>
     <div class="container">
-        <h1>Import Details: {{ import.unique_number }}</h1>
+        <h1> {{ import.unique_number }} - {{ import.name }}</h1>
 
         <div class="import-info">
             <p><strong>Name:</strong> {{ import.name }}</p>
@@ -24,7 +24,7 @@
             <p><strong>Last Updated:</strong> {{ import.updated_at }}</p>
         </div>
 
-        <h2>Packages</h2>
+        <h2>Weight and Dimensions</h2>
         {% if import.packages.all %}
             <table class="package-table">
                 <thead>

@@ -6,6 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Register Import</title>
     <link rel="stylesheet" href="{% static 'css/imports/register_import.css' %}">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.17.4/xlsx.full.min.js"></script> <!-- ✅ Add XLSX Library -->
 </head>
 <body>
     <div class="container">
@@ -15,10 +16,11 @@
         <form method="post" id="import-form">
             {% csrf_token %}
             {{ import_form.as_p }}
-        
+
+            <!-- Package Section -->
             <h2>Packages</h2>
             <div id="package-list"></div>
-        
+
             <div class="package-form">
                 <label>Package Type</label>
                 <select id="package_type">
@@ -42,18 +44,43 @@
 
                 <button type="button" onclick="addPackage()">Add Package</button>
             </div>
-        
-            <!-- ✅ Hidden field to send package data -->
+
+            <!-- ✅ Hidden fields to store JSON data -->
             <input type="hidden" name="packages" id="packages-json">
-        
+            <input type="hidden" name="excel_data" id="excel-data-json"> <!-- Store Excel data -->
+
+            <h2>Upload Details</h2>
+            <input type="file" id="uploadExcel" accept=".xls,.xlsx">
+            <button type="button" onclick="handleFileUpload()">Upload Details</button>
+
+            <!-- ✅ Display Uploaded Data Here -->
+            <div class="table-container">
+                <table id="excelTable">
+                    <thead>
+                        <tr>
+                            <th>Import Number</th>
+                            <th>PO Number</th>
+                            <th>Line Number</th>
+                            <th>Item Number</th>
+                            <th>Description Eng</th>
+                            <th>Quantity</th>
+                            <th>Unit Cost</th>
+                            <th>Line Cost</th>
+                        </tr>
+                    </thead>
+                    <tbody></tbody>
+                </table>
+            </div>
+
             <div class="button-container">
                 <button type="submit" class="submit-button">Register Import</button>
                 <a href="{% url 'import_list' %}" class="back-button">Back</a>
             </div>
         </form>
-        
+
         <script>
             let packages = [];
+            let excelData = [];
 
             function addPackage() {
                 let packageType = document.getElementById("package_type").value;
@@ -76,19 +103,13 @@
                 };
 
                 packages.push(packageData);
-                console.log("✅ Package added:", packageData);  // Debugging
-
-                // ✅ Update hidden input field before form submission
                 document.getElementById("packages-json").value = JSON.stringify(packages);
-                console.log("🔍 Updated Hidden Field:", document.getElementById("packages-json").value);  // Debugging
 
-                // ✅ Display entered packages
                 let packageList = document.getElementById("package-list");
                 let packageItem = document.createElement("div");
                 packageItem.innerHTML = `<p>${packageType} - ${length}x${width}x${height} - ${grossWeight}kg</p>`;
                 packageList.appendChild(packageItem);
 
-                // ✅ Clear fields after adding a package
                 document.getElementById("package_type").value = "";
                 document.getElementById("length").value = "";
                 document.getElementById("width").value = "";
@@ -96,11 +117,71 @@
                 document.getElementById("gross_weight").value = "";
             }
 
-            // ✅ Ensure packages don't persist when refreshing the page
-            window.addEventListener("beforeunload", function () {
-                packages = [];
-                document.getElementById("packages-json").value = "";
-            });
+            function handleFileUpload() {
+                let fileInput = document.getElementById("uploadExcel");
+                let file = fileInput.files[0];
+
+                if (!file) {
+                    alert("⚠️ Please select an Excel file!");
+                    return;
+                }
+
+                let reader = new FileReader();
+                reader.onload = function(e) {
+                    let data = new Uint8Array(e.target.result);
+                    let workbook = XLSX.read(data, { type: 'array' });
+                    let sheetName = workbook.SheetNames[0];
+                    let sheet = workbook.Sheets[sheetName];
+                    let jsonData = XLSX.utils.sheet_to_json(sheet, { header: 1 });
+
+                    displayExcelData(jsonData);
+                };
+                reader.readAsArrayBuffer(file);
+            }
+
+            function displayExcelData(data) {
+                let tableBody = document.querySelector("#excelTable tbody");
+                tableBody.innerHTML = "";
+
+                if (data.length <= 1) {
+                    alert("⚠️ No valid data found in the Excel file!");
+                    return;
+                }
+
+                let importNumber = "IMP" + String(new Date().getTime()).slice(-5); // Generate temp import number
+                excelData = [];
+
+                for (let i = 1; i < data.length; i++) {
+                    let rowData = {
+                        importNumber: importNumber,
+                        poNumber: data[i][0] || "N/A",
+                        lineNumber: data[i][1] || 0,
+                        itemNumber: data[i][2] || "N/A",
+                        descriptionEng: data[i][3] || "N/A",
+                        quantity: data[i][4] || 0,
+                        unitCost: data[i][5] || 0,
+                        lineCost: data[i][6] || 0,
+                    };
+
+                    excelData.push(rowData);
+
+                    let row = document.createElement("tr");
+                    row.innerHTML = `
+                        <td>${rowData.importNumber}</td>
+                        <td>${rowData.poNumber}</td>
+                        <td>${rowData.lineNumber}</td>
+                        <td>${rowData.itemNumber}</td>
+                        <td>${rowData.descriptionEng}</td>
+                        <td>${rowData.quantity}</td>
+                        <td>${rowData.unitCost}</td>
+                        <td>${rowData.lineCost}</td>
+                    `;
+                    tableBody.appendChild(row);
+                }
+
+                document.getElementById("excel-data-json").value = JSON.stringify(excelData);
+            }
         </script>
+    </div>
 </body>
 </html>
