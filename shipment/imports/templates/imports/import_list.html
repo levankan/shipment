@@ -9,7 +9,12 @@
 </head>
 <body>
     <div class="container">
-        <h1>List of Registered Imports</h1>
+        <!-- Top Section -->
+        <div class="header">
+            <h1>List of Registered Imports</h1>
+            <a href="{% url 'register_import' %}" class="add-button">+ Register New Import</a>
+        </div>
+
         <table>
             <thead>
                 <tr>
@@ -37,7 +42,6 @@
                                 Finish
                             </button>
 
-
                             <!-- Delete Form -->
                             <form action="{% url 'delete_import' import.unique_number %}" method="post" class="delete-form">
                                 {% csrf_token %}
@@ -52,10 +56,6 @@
                 {% endfor %}
             </tbody>
         </table>
-
-        <div class="button-container">
-            <a href="{% url 'register_import' %}" class="add-button">Register New Import</a>
-        </div>
     </div>
 
     <script>
