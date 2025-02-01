@@ -19,7 +19,7 @@
             <thead>
                 <tr>
                     <th>Import Number</th>
-                    <th>Name</th>
+                    <th>Vendor Name</th>
                     <th>Country</th>
                     <th>Status</th>
                     <th>Actions</th>
@@ -29,7 +29,7 @@
                 {% for import in imports %}
                     <tr id="import-{{ import.unique_number }}">
                         <td><a href="{% url 'import_detail' import.unique_number %}">{{ import.unique_number }}</a></td>
-                        <td>{{ import.name }}</td>
+                        <td>{{ import.vendor_name }}</td>
                         <td>{{ import.country }}</td>
                         <td class="status-cell">{{ import.status }}</td>
                         <td>
@@ -41,12 +41,6 @@
                                     {% if import.status|lower == 'finished' %}disabled{% endif %}>
                                 Finish
                             </button>
-
-                            <!-- Delete Form -->
-                            <form action="{% url 'delete_import' import.unique_number %}" method="post" class="delete-form">
-                                {% csrf_token %}
-                                <button type="submit" class="delete-button">Delete</button>
-                            </form>
                         </td>
                     </tr>
                 {% empty %}

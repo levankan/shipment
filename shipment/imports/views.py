@@ -11,7 +11,8 @@ from django.core.files.storage import FileSystemStorage
 from .models import ImportDetail, Import
 from .models import Import, Package, ImportDetail, PACKAGE_TYPE_CHOICES
 from .forms import ImportForm, PackageForm
-
+from django.contrib.auth import authenticate
+from django.contrib import messages
 
 
 
@@ -113,15 +114,29 @@ def edit_import(request, unique_number):
 
 
 
+
+
 @login_required
 def delete_import(request, unique_number):
     import_instance = get_object_or_404(Import, unique_number=unique_number)
 
     if request.method == "POST":
-        import_instance.delete()
-        return redirect('import_list')
+        password = request.POST.get("password")
 
-    return render(request, 'imports/delete_import.html', {'import': import_instance})
+        # Authenticate user before deleting
+        user = authenticate(username=request.user.username, password=password)
+        if user is not None:
+            import_instance.delete()
+            messages.success(request, "Import deleted successfully!")
+            return redirect("import_list")
+        else:
+            messages.error(request, "Incorrect password! Import was NOT deleted.")
+
+    return render(request, "imports/delete_import.html", {"import": import_instance})
+
+
+
+
 
 
 

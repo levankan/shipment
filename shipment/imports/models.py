@@ -28,7 +28,7 @@ class Import(models.Model):
 
 
     unique_number = models.CharField(max_length=10, unique=True, editable=False)
-    name = models.CharField(max_length=100)
+    vendor_name = models.CharField(max_length=100)
     description = models.TextField(blank=True, null=True)
     country = models.CharField(max_length=100)
     incoterms = models.CharField(max_length=3, choices=INCOTERMS_CHOICES)

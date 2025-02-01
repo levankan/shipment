@@ -9,16 +9,19 @@
 </head>
 <body>
     <div class="container">
-        <!-- Status Badge at the Top Right -->
-        <div class="status-container">
-            <span id="import-status" class="status-badge {{ import.status|lower }}">{{ import.status }}</span>
+        <!-- Top Navigation -->
+        <div class="top-nav">
+            <a href="{% url 'import_list' %}" class="back-button">← Back to Imports</a>
+            <div class="status-container">
+                <span id="import-status" class="status-badge {{ import.status|lower }}">{{ import.status }}</span>
+            </div>
         </div>
 
         <h1> {{ import.unique_number }}</h1>
 
         <!-- Import Details -->
         <div class="import-info">
-            <p><strong>Name:</strong> {{ import.name }}</p>
+            <p><strong>Vendor Name:</strong> {{ import.vendor_name }}</p>
             <p><strong>Description:</strong> {{ import.description }}</p>
             <p><strong>Country:</strong> {{ import.country }}</p>
             <p><strong>Incoterms:</strong> {{ import.get_incoterms_display }}</p>
@@ -37,7 +40,6 @@
                     {% if import.status == 'Finished' %}disabled{% endif %}>
                 Finish Import
             </button>
-            <a href="{% url 'import_list' %}" class="back-button">Back to Imports</a>
         </div>
 
         <h2>Weight and Dimensions</h2>
@@ -95,6 +97,17 @@
         {% else %}
             <p>No details uploaded yet.</p>
         {% endif %}
+
+        <!-- DELETE SECTION -->
+        <h2>⚠️ Delete Import</h2>
+        <p class="delete-warning">This action cannot be undone! Enter your password to confirm.</p>
+
+        <form id="delete-form" action="{% url 'delete_import' import.unique_number %}" method="post">
+            {% csrf_token %}
+            <label for="delete-password">Password:</label>
+            <input type="password" id="delete-password" name="password" required>
+            <button type="submit" class="delete-button">Delete Import</button>
+        </form>
     </div>
 
     <!-- JavaScript for Finish Import -->
