@@ -1,7 +1,7 @@
-/* General Page Styles */
+/* General Styles */
 body {
     font-family: Arial, sans-serif;
-    background-color: #f8f9fa;
+    background-color: #f4f7fa;
     margin: 0;
     padding: 20px;
 }
@@ -11,9 +11,36 @@ body {
     max-width: 900px;
     margin: auto;
     background-color: white;
-    padding: 25px;
-    border-radius: 8px;
-    box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+    padding: 30px;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    position: relative;
+}
+
+/* Status Badge */
+.status-container {
+    position: absolute;
+    top: 15px;
+    right: 20px;
+}
+
+.status-badge {
+    padding: 8px 15px;
+    font-size: 14px;
+    font-weight: bold;
+    border-radius: 12px;
+    text-transform: uppercase;
+}
+
+/* Different Status Colors */
+.status-badge.active {
+    background-color: #28a745;
+    color: white;
+}
+
+.status-badge.finished {
+    background-color: #dc3545;
+    color: white;
 }
 
 /* Headings */
@@ -26,9 +53,9 @@ h1, h2 {
 /* Import Information */
 .import-info {
     background-color: #f9f9f9;
-    padding: 15px;
+    padding: 20px;
     border-radius: 8px;
-    margin-bottom: 20px;
+    margin-bottom: 25px;
     box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.1);
 }
 
@@ -38,7 +65,7 @@ h1, h2 {
     margin: 8px 0;
 }
 
-/* Package Table */
+/* Table Styles */
 .package-table, .details-table {
     width: 100%;
     border-collapse: collapse;
@@ -49,7 +76,7 @@ h1, h2 {
 .package-table th, .package-table td,
 .details-table th, .details-table td {
     border: 1px solid #ddd;
-    padding: 10px;
+    padding: 12px;
     text-align: center;
 }
 
@@ -63,18 +90,28 @@ h1, h2 {
     background-color: #f2f2f2;
 }
 
-.package-table tr:hover,
-.details-table tr:hover {
-    background-color: #ddd;
-}
-
-/* Button Container */
+/* Buttons */
 .button-container {
     text-align: center;
     margin-top: 20px;
 }
 
-/* Back Button */
+.finish-button {
+    background-color: #28a745;
+    color: white;
+    padding: 12px 18px;
+    border-radius: 5px;
+    font-weight: bold;
+    border: none;
+    cursor: pointer;
+    transition: background 0.3s ease;
+}
+
+.finish-button:disabled {
+    background-color: #ccc;
+    cursor: not-allowed;
+}
+
 .back-button {
     text-decoration: none;
     background-color: #007bff;
@@ -90,24 +127,10 @@ h1, h2 {
     background-color: #0056b3;
 }
 
-/* Responsive Design */
+/* Responsive */
 @media screen and (max-width: 768px) {
     .container {
         width: 95%;
-        padding: 15px;
-    }
-
-    .package-table, .details-table {
-        font-size: 12px;
-    }
-
-    .package-table th, .package-table td,
-    .details-table th, .details-table td {
-        padding: 6px;
-    }
-
-    .back-button {
-        padding: 10px 16px;
-        font-size: 14px;
+        padding: 20px;
     }
 }
