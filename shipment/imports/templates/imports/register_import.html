@@ -29,10 +29,11 @@
                 <label>Package Type</label>
                 <select id="package_type">
                     <option value="">Select Package Type</option>
-                    {% for key, value in PACKAGE_TYPE_CHOICES %}
+                    {% for key, value in package_type_choices %}  <!-- ✅ Ensure correct variable name -->
                         <option value="{{ key }}">{{ value }}</option>
                     {% endfor %}
-                </select>                          
+                </select>
+                                         
         
                 <label>Length</label>
                 <input type="number" id="length" step="0.01" min="0">

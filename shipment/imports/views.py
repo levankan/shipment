@@ -70,7 +70,7 @@ def register_import(request):
     return render(request, 'imports/register_import.html', {
         'import_form': import_form,
         'import_number': import_number,  # ✅ Pass import number to the template
-        'PACKAGE_TYPE_CHOICES': PACKAGE_TYPE_CHOICES  # ✅ Pass package type choices
+        'package_type_choices': PACKAGE_TYPE_CHOICES  # ✅ Fix variable name
     })
 
 
