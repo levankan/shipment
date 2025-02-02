@@ -5,7 +5,7 @@ class ImportForm(forms.ModelForm):
     class Meta:
         model = Import
         fields = [
-            'vendor_name', 'description', 'country', 'incoterms', 'operation',
+            'vendor_name', 'country', 'incoterms', 'operation',
             'is_dangerous', 'is_stackable', 'pickup_address', 'currency' 
         ]
 
