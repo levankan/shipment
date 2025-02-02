@@ -40,6 +40,14 @@
                 {% endfor %}
             </select>
 
+            <!-- ✅ Forwarder Company Dropdown -->
+            <label for="id_forwarder_company">Forwarder Company:</label>
+            <select name="forwarder_company" id="id_forwarder_company">
+                {% for key, value in import_form.fields.forwarder_company.choices %}
+                    <option value="{{ key }}" {% if import_form.forwarder_company.value == key %}selected{% endif %}>{{ value }}</option>
+                {% endfor %}
+            </select>
+
             <h2>Packages</h2>
             <div id="package-list"></div>
 

@@ -156,3 +156,23 @@ tr:nth-child(even) {
     justify-content: center;
 }
 
+
+.button-group {
+    display: flex;
+    gap: 10px;
+}
+
+.export-all-button {
+    text-decoration: none;
+    background-color: #17a2b8;
+    color: white;
+    padding: 10px 20px;
+    border-radius: 5px;
+    font-weight: bold;
+    display: inline-block;
+    transition: background 0.3s ease;
+}
+
+.export-all-button:hover {
+    background-color: #138496;
+}

@@ -32,6 +32,18 @@ CURRENCY_CHOICES = [
     ('GEL', 'GEL - Georgian Lari'),
 ]
 
+FORWARDER_CHOICES = [
+    ('Gebruder Weiss', 'Gebruder Weiss'),
+    ('DBschenker', 'DBschenker'),
+    ('DSV-Transglobe', 'DSV-Transglobe'),
+    ('Gianti Logistics', 'Gianti Logistics'),
+    ('FedEx', 'FedEx'),
+    ('DHL', 'DHL'),
+    ('UPS', 'UPS'),
+    ('Other', 'Other'),
+]
+
+
 class Import(models.Model):
     unique_number = models.CharField(max_length=10, unique=True, editable=False)
     vendor_name = models.CharField(max_length=100)
@@ -45,6 +57,7 @@ class Import(models.Model):
     is_stackable = models.BooleanField(default=True)
     pickup_address = models.TextField()
     currency = models.CharField(max_length=4, choices=CURRENCY_CHOICES, default='USD')  # ✅ Added currency field
+    forwarder_company = models.CharField(max_length=50, choices=FORWARDER_CHOICES, default="Other")
     status = models.CharField(max_length=10, choices=STATUS_CHOICES, default='Active')
     date_created = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)

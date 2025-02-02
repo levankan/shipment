@@ -1,12 +1,12 @@
 from django import forms
-from .models import Import, Package, PACKAGE_TYPE_CHOICES, INCOTERMS_CHOICES, CURRENCY_CHOICES  # ✅ Import CURRENCY_CHOICES
+from .models import Import, Package, PACKAGE_TYPE_CHOICES, INCOTERMS_CHOICES, CURRENCY_CHOICES, FORWARDER_CHOICES
 
 class ImportForm(forms.ModelForm):
     class Meta:
         model = Import
         fields = [
             'vendor_name', 'country', 'incoterms', 'operation',
-            'is_dangerous', 'is_stackable', 'pickup_address', 'currency' 
+            'is_dangerous', 'is_stackable', 'pickup_address', 'currency', 'forwarder_company'
         ]
 
     # ✅ Now this will work correctly

@@ -12,7 +12,10 @@
         <!-- Top Section -->
         <div class="header">
             <h1>List of Registered Imports</h1>
-            <a href="{% url 'register_import' %}" class="add-button">+ Register New Import</a>
+            <div class="button-group">
+                <a href="{% url 'register_import' %}" class="add-button">+ Register New Import</a>
+                <a href="{% url 'export_all_imports_excel' %}" class="export-all-button">Export All in Excel</a>
+            </div>
         </div>
 
         <table>

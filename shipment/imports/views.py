@@ -269,3 +269,73 @@ def export_import_excel(request, unique_number):
 
     except Import.DoesNotExist:
         return HttpResponse("Import not found", status=404)
+
+
+
+
+import pandas as pd
+from django.http import HttpResponse
+from .models import Import, ImportDetail
+
+def export_all_imports_excel(request):
+    # Fetch all import records with related details
+    imports = Import.objects.all().prefetch_related("import_details")
+
+    # Prepare Data
+    data = []
+    
+    for import_instance in imports:
+        details = ImportDetail.objects.filter(import_instance=import_instance)
+
+        # Base Import Data
+        base_info = [
+            import_instance.unique_number,
+            import_instance.vendor_name,
+            import_instance.status,
+            import_instance.country,
+            import_instance.get_incoterms_display(),
+            import_instance.get_operation_display(),
+            import_instance.pickup_address,
+            import_instance.date_created.strftime('%Y-%m-%d %H:%M:%S'),
+            import_instance.updated_at.strftime('%Y-%m-%d %H:%M:%S'),
+        ]
+
+        # If no details, add a row with empty detail columns
+        if not details.exists():
+            data.append(base_info + ["", "", "", "", "", "", ""])
+        else:
+            for detail in details:
+                data.append(base_info + [
+                    detail.po_number,
+                    detail.line_number,
+                    detail.item_number,
+                    detail.description_eng,
+                    detail.quantity,
+                    detail.unit_cost,
+                    detail.line_cost,
+                ])
+
+    # Define column headers
+    columns = [
+        "Import Number", "Vendor Name", "Status", "Country", "Incoterms", "Operation",
+        "Pickup Address", "Date Created", "Last Updated",
+        "PO Number", "Line Number", "Item Number", "Description", "Quantity", "Unit Cost", "Line Cost"
+    ]
+
+    # Create DataFrame
+    df = pd.DataFrame(data, columns=columns)
+
+    # Create HTTP Response for Excel File
+    response = HttpResponse(content_type="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet")
+    response["Content-Disposition"] = 'attachment; filename="All_Imports.xlsx"'
+
+    # Write DataFrame to Excel
+    with pd.ExcelWriter(response, engine="xlsxwriter") as writer:
+        df.to_excel(writer, sheet_name="All Imports", index=False)
+
+        # Formatting for readability
+        worksheet = writer.sheets["All Imports"]
+        for col_num, value in enumerate(df.columns):
+            worksheet.set_column(col_num, col_num, max(15, len(value) + 2))
+
+    return response
