@@ -13,6 +13,8 @@ from .models import Import, Package, ImportDetail, PACKAGE_TYPE_CHOICES
 from .forms import ImportForm, PackageForm
 from django.contrib.auth import authenticate
 from django.contrib import messages
+from django.http import HttpResponse
+
 
 
 
@@ -199,3 +201,71 @@ def upload_excel(request):
             return JsonResponse({"error": str(e)}, status=500)
 
     return JsonResponse({"error": "No file uploaded!"}, status=400)
+
+
+
+
+
+
+def export_import_excel(request, unique_number):
+    try:
+        # Fetch import instance
+        import_instance = Import.objects.get(unique_number=unique_number)
+        details = ImportDetail.objects.filter(import_instance=import_instance)
+
+        # Create an HTTP response with an Excel content type
+        output = HttpResponse(content_type='application/vnd.openxmlformats-officedocument.spreadsheetml.sheet')
+        output['Content-Disposition'] = f'attachment; filename="{import_instance.unique_number}_export.xlsx"'
+
+        # Create a Pandas Excel writer
+        writer = pd.ExcelWriter(output, engine='xlsxwriter')
+
+        # ✅ Prepare data for single sheet
+        data = []
+
+        # Fetching Import Information (First Row)
+        base_info = [
+            import_instance.unique_number,
+            import_instance.vendor_name,
+            import_instance.status,
+            import_instance.country,
+            import_instance.get_incoterms_display(),
+            import_instance.get_operation_display(),
+            import_instance.pickup_address,
+            import_instance.date_created.strftime('%Y-%m-%d'),
+            import_instance.updated_at.strftime('%Y-%m-%d'),
+        ]
+
+        # If no import details, export only basic import info
+        if not details.exists():
+            data.append(base_info + ["", "", "", "", "", "", ""])  # Fill remaining columns with empty values
+        else:
+            # Fetching Import Details
+            for detail in details:
+                data.append(base_info + [
+                    detail.po_number,
+                    detail.line_number,
+                    detail.item_number,
+                    detail.description_eng,
+                    detail.quantity,
+                    detail.unit_cost,
+                    detail.line_cost
+                ])
+
+        # Define column names
+        columns = [
+            "Import Number", "Vendor Name", "Status", "Country", "Incoterms", "Operation", 
+            "Pickup Address", "Date Created", "Last Updated",
+            "PO Number", "Line Number", "Item Number", "Description", "Quantity", "Unit Cost", "Line Cost"
+        ]
+
+        # Create DataFrame and Export to Excel
+        df = pd.DataFrame(data, columns=columns)
+        df.to_excel(writer, sheet_name="Import Data", index=False)
+
+        # Save the Excel file and return response
+        writer.close()
+        return output
+
+    except Import.DoesNotExist:
+        return HttpResponse("Import not found", status=404)

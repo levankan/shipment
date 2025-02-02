@@ -129,3 +129,30 @@ tr:nth-child(even) {
         font-size: 14px;
     }
 }
+
+
+
+/* Export Excel Button */
+.export-excel-button {
+    background-color: #17a2b8; /* Teal color */
+    color: white;
+    border: none;
+    padding: 8px 14px;
+    border-radius: 5px;
+    font-size: 12px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: background 0.3s ease;
+}
+
+.export-excel-button:hover {
+    background-color: #138496;
+}
+
+/* Adjust Buttons Layout */
+.actions {
+    display: flex;
+    gap: 8px;
+    justify-content: center;
+}
+
