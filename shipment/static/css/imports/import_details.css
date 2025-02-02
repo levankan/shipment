@@ -90,21 +90,28 @@ h1, h2 {
     background-color: #f2f2f2;
 }
 
-/* Buttons */
-.button-container {
-    text-align: center;
-    margin-top: 20px;
+/* Finish Import Button - Bottom Right */
+.finish-button-container {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    z-index: 1000;
 }
 
 .finish-button {
     background-color: #28a745;
     color: white;
-    padding: 12px 18px;
-    border-radius: 5px;
+    padding: 14px 22px;
+    border-radius: 6px;
+    font-size: 16px;
     font-weight: bold;
     border: none;
     cursor: pointer;
     transition: background 0.3s ease;
+}
+
+.finish-button:hover {
+    background-color: #218838;
 }
 
 .finish-button:disabled {
@@ -112,6 +119,65 @@ h1, h2 {
     cursor: not-allowed;
 }
 
+/* Confirmation Modal */
+.modal {
+    display: none;
+    position: fixed;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    background-color: white;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+    z-index: 1001;
+    min-width: 300px;
+}
+
+.modal-content {
+    text-align: center;
+    font-size: 18px;
+}
+
+/* Modal Buttons */
+.modal-buttons {
+    display: flex;
+    justify-content: center;
+    gap: 15px;
+    margin-top: 15px;
+}
+
+.confirm-button {
+    background-color: #28a745;
+    color: white;
+    padding: 10px 16px;
+    border-radius: 5px;
+    font-weight: bold;
+    border: none;
+    cursor: pointer;
+    font-size: 14px;
+}
+
+.cancel-button {
+    background-color: #dc3545;
+    color: white;
+    padding: 10px 16px;
+    border-radius: 5px;
+    font-weight: bold;
+    border: none;
+    cursor: pointer;
+    font-size: 14px;
+}
+
+.confirm-button:hover {
+    background-color: #218838;
+}
+
+.cancel-button:hover {
+    background-color: #c82333;
+}
+
+/* Back Button */
 .back-button {
     text-decoration: none;
     background-color: #007bff;
@@ -125,58 +191,6 @@ h1, h2 {
 
 .back-button:hover {
     background-color: #0056b3;
-}
-
-/* Responsive */
-@media screen and (max-width: 768px) {
-    .container {
-        width: 95%;
-        padding: 20px;
-    }
-}
-
-
-/* Top Navigation */
-.top-nav {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-bottom: 20px;
-}
-
-/* Back Button */
-.back-button {
-    background-color: #007bff;
-    color: white;
-    padding: 10px 20px;
-    border-radius: 5px;
-    text-decoration: none;
-    font-weight: bold;
-}
-
-.back-button:hover {
-    background-color: #0056b3;
-}
-
-/* Status Badge */
-.status-container {
-    font-size: 16px;
-    font-weight: bold;
-}
-
-.status-badge {
-    padding: 8px 15px;
-    border-radius: 15px;
-    color: white;
-    font-size: 14px;
-}
-
-.status-badge.active {
-    background-color: green;
-}
-
-.status-badge.finished {
-    background-color: gray;
 }
 
 /* Delete Warning */
@@ -213,4 +227,21 @@ h1, h2 {
 
 .delete-button:hover {
     background-color: darkred;
+}
+
+/* Responsive Design */
+@media screen and (max-width: 768px) {
+    .container {
+        width: 95%;
+        padding: 20px;
+    }
+
+    .finish-button-container {
+        bottom: 10px;
+        right: 10px;
+    }
+
+    .modal {
+        width: 90%;
+    }
 }

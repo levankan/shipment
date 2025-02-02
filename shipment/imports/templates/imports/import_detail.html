@@ -33,14 +33,6 @@
             <p><strong>Last Updated:</strong> {{ import.updated_at }}</p>
         </div>
 
-        <!-- Finish Import Button -->
-        <div class="button-container">
-            <button id="finish-btn" class="finish-button"
-                    data-unique-number="{{ import.unique_number }}"
-                    {% if import.status == 'Finished' %}disabled{% endif %}>
-                Finish Import
-            </button>
-        </div>
 
         <h2>Weight and Dimensions</h2>
         {% if import.packages.all %}
@@ -100,6 +92,26 @@
             <p>No details uploaded yet.</p>
         {% endif %}
 
+        <!-- Finish Import Button (Bottom Right) -->
+        <div class="button-container">
+            <button id="finish-btn" class="finish-button"
+                    data-unique-number="{{ import.unique_number }}"
+                    {% if import.status == 'Finished' %}disabled{% endif %}>
+                Finish Import
+            </button>
+        </div>
+        
+        <!-- Confirmation Popup (Initially Hidden) -->
+        <div id="finish-confirmation" class="modal">
+            <div class="modal-content">
+                <p>Do you want to finish this import?</p>
+                <div class="modal-buttons">
+                    <button id="confirm-finish" class="confirm-button">Yes</button>
+                    <button id="cancel-finish" class="cancel-button">No</button>
+                </div>
+            </div>
+        </div>
+
         <!-- DELETE SECTION -->
         <h2>⚠️ Delete Import</h2>
         <p class="delete-warning">This action cannot be undone! Enter your password to confirm.</p>
@@ -115,8 +127,16 @@
     <!-- JavaScript for Finish Import -->
     <script>
         document.getElementById("finish-btn").addEventListener("click", function() {
-            let uniqueNumber = this.getAttribute("data-unique-number");
-
+            document.getElementById("finish-confirmation").style.display = "block";
+        });
+    
+        document.getElementById("cancel-finish").addEventListener("click", function() {
+            document.getElementById("finish-confirmation").style.display = "none";
+        });
+    
+        document.getElementById("confirm-finish").addEventListener("click", function() {
+            let uniqueNumber = document.getElementById("finish-btn").getAttribute("data-unique-number");
+    
             fetch(`/imports/${uniqueNumber}/finish/`, {
                 method: "POST",
                 headers: {
@@ -131,10 +151,13 @@
                     document.getElementById("import-status").textContent = "Finished";
                     document.getElementById("import-status").classList.remove("active");
                     document.getElementById("import-status").classList.add("finished");
-                    this.disabled = true;
+                    document.getElementById("finish-btn").disabled = true;
                 }
+                document.getElementById("finish-confirmation").style.display = "none";
             });
         });
     </script>
+    
+    
 </body>
 </html>
