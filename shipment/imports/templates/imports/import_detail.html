@@ -78,6 +78,7 @@
                     <th>Quantity</th>
                     <th>Unit Cost</th>
                     <th>Line Cost</th>
+                    <th>Currency</th>
                 </tr>
             </thead>
             <tbody>
@@ -88,8 +89,9 @@
                         <td>{{ detail.item_number }}</td>
                         <td>{{ detail.description_eng }}</td>
                         <td>{{ detail.quantity }}</td>
-                        <td>${{ detail.unit_cost|floatformat:2 }}</td>
-                        <td>${{ detail.line_cost|floatformat:2 }}</td>
+                        <td>{{ detail.unit_cost|floatformat:2 }}</td>
+                        <td>{{ detail.line_cost|floatformat:2 }}</td>
+                        <td>{{ import.get_currency_display }}</td>
                     </tr>
                 {% endfor %}
             </tbody>
