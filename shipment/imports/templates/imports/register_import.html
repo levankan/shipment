@@ -6,17 +6,17 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Register Import</title>
     <link rel="stylesheet" href="{% static 'css/imports/register_import.css' %}">
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.17.4/xlsx.full.min.js"></script> <!-- ✅ Add XLSX Library -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.17.4/xlsx.full.min.js"></script>
 </head>
 <body>
 
     <div class="container">
-        <!-- Back to Imports button (top-left) -->
+        <!-- Back Button -->
         <a href="{% url 'import_list' %}" class="back-button">← Back to Imports</a>
 
         <h1>Register a New Import</h1>
-        
-        <!-- ✅ Show and Store Import Number -->
+
+        <!-- ✅ Show Import Number -->
         <h4>Import Number: <span id="display-import-number">{{ import_number }}</span></h4>
         <input type="hidden" name="import_number" id="import_number" value="{{ import_number }}">
 
@@ -24,29 +24,7 @@
         <form method="post" id="import-form">
             {% csrf_token %}
 
-            {{ import_form.vendor_name.label_tag }} {{ import_form.vendor_name }}
-            {{ import_form.country.label_tag }} {{ import_form.country }}
-            {{ import_form.incoterms.label_tag }} {{ import_form.incoterms }}
-            {{ import_form.operation.label_tag }} {{ import_form.operation }}
-            {{ import_form.is_dangerous.label_tag }} {{ import_form.is_dangerous }}
-            {{ import_form.is_stackable.label_tag }} {{ import_form.is_stackable }}
-            {{ import_form.pickup_address.label_tag }} {{ import_form.pickup_address }}
-
-            <!-- ✅ Currency Dropdown -->
-            <label for="id_currency">Currency:</label>
-            <select name="currency" id="id_currency">
-                {% for key, value in import_form.fields.currency.choices %}
-                    <option value="{{ key }}" {% if import_form.currency.value == key %}selected{% endif %}>{{ value }}</option>
-                {% endfor %}
-            </select>
-
-            <!-- ✅ Forwarder Company Dropdown -->
-            <label for="id_forwarder_company">Forwarder Company:</label>
-            <select name="forwarder_company" id="id_forwarder_company">
-                {% for key, value in import_form.fields.forwarder_company.choices %}
-                    <option value="{{ key }}" {% if import_form.forwarder_company.value == key %}selected{% endif %}>{{ value }}</option>
-                {% endfor %}
-            </select>
+            {{ import_form.as_p }}
 
             <h2>Packages</h2>
             <div id="package-list"></div>
@@ -59,19 +37,10 @@
                         <option value="{{ key }}">{{ value }}</option>
                     {% endfor %}
                 </select>
-                                         
-                <label>Length</label>
-                <input type="number" id="length" step="0.01" min="0">
-
-                <label>Width</label>
-                <input type="number" id="width" step="0.01" min="0">
-
-                <label>Height</label>
-                <input type="number" id="height" step="0.01" min="0">
-
-                <label>Gross Weight</label>
-                <input type="number" id="gross_weight" step="0.01" min="0">
-                
+                <label>Length</label><input type="number" id="length" step="0.01" min="0">
+                <label>Width</label><input type="number" id="width" step="0.01" min="0">
+                <label>Height</label><input type="number" id="height" step="0.01" min="0">
+                <label>Gross Weight</label><input type="number" id="gross_weight" step="0.01" min="0">
                 <button type="button" onclick="addPackage()">Add Package</button>
             </div>
 
@@ -97,7 +66,7 @@
                 </table>
             </div>
 
-            <!-- ✅ Store Excel Data Before Submitting -->
+            <!-- ✅ Ensure Data is Stored Before Submitting -->
             <input type="hidden" name="packages" id="packages-json">
             <input type="hidden" name="excel_data" id="excel-data-json">
 
@@ -176,7 +145,7 @@
                     return;
                 }
 
-                let importNumber = document.getElementById("import_number").value;
+                let importNumber = document.getElementById("import_number").value || "N/A";
                 excelData = [];
 
                 for (let i = 1; i < data.length; i++) {
@@ -188,27 +157,24 @@
                         descriptionEng: data[i][3] || "N/A",
                         quantity: data[i][4] || 0,
                         unitCost: data[i][5] || 0,
-                        lineCost: data[i][6] || 0,
+                        lineCost: (data[i][5] || 0) * (data[i][4] || 0)
                     };
 
                     excelData.push(rowData);
 
                     let row = document.createElement("tr");
-                    row.innerHTML = `
-                        <td>${rowData.importNumber}</td>
-                        <td>${rowData.poNumber}</td>
-                        <td>${rowData.lineNumber}</td>
-                        <td>${rowData.itemNumber}</td>
-                        <td>${rowData.descriptionEng}</td>
-                        <td>${rowData.quantity}</td>
-                        <td>${rowData.unitCost}</td>
-                        <td>${rowData.lineCost}</td>
-                    `;
+                    row.innerHTML = `<td>${rowData.importNumber}</td><td>${rowData.poNumber}</td><td>${rowData.lineNumber}</td><td>${rowData.itemNumber}</td><td>${rowData.descriptionEng}</td><td>${rowData.quantity}</td><td>${rowData.unitCost}</td><td>${rowData.lineCost}</td>`;
                     tableBody.appendChild(row);
                 }
 
                 document.getElementById("excel-data-json").value = JSON.stringify(excelData);
             }
+
+            document.getElementById("import-form").addEventListener("submit", function(event) {
+                document.getElementById("packages-json").value = JSON.stringify(packages);
+                document.getElementById("excel-data-json").value = JSON.stringify(excelData);
+            });
+
         </script>
     </div>
 </body>

@@ -29,6 +29,7 @@
             <p><strong>Dangerous Goods:</strong> {% if import.is_dangerous %} ✅ Yes {% else %} ❌ No {% endif %}</p>
             <p><strong>Stackable:</strong> {% if import.is_stackable %} ✅ Yes {% else %} ❌ No {% endif %}</p>
             <p><strong>Pickup Address:</strong> {{ import.pickup_address }}</p>
+            <p><strong>Tracking Number:</strong> {{ import.tracking_number}}</p>
             <p><strong>Date Created:</strong> {{ import.date_created }}</p>
             <p><strong>Last Updated:</strong> {{ import.updated_at }}</p>
         </div>

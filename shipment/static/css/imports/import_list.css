@@ -16,7 +16,7 @@ body {
     box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
 }
 
-/* Header Section (Title + Button) */
+/* Header Section */
 .header {
     display: flex;
     justify-content: space-between;
@@ -24,20 +24,71 @@ body {
     margin-bottom: 20px;
 }
 
-/* Register New Import Button */
-.add-button {
-    text-decoration: none;
-    background-color: #28a745;
-    color: white;
-    padding: 10px 20px;
-    border-radius: 5px;
-    font-weight: bold;
+/* Button Group */
+.button-group {
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+}
+
+/* General Button Styling */
+.button-group a, 
+button {
     display: inline-block;
-    transition: background 0.3s ease;
+    padding: 10px 16px;
+    border-radius: 6px;
+    text-decoration: none;
+    font-size: 14px;
+    font-weight: bold;
+    transition: background-color 0.3s ease, transform 0.2s ease;
+    text-align: center;
+    border: none;
+    cursor: pointer;
+    margin: 5px;
+}
+
+/* Register Import Button */
+.add-button {
+    background-color: #002664;  /* Dark Blue */
+    color: white;
 }
 
 .add-button:hover {
+    background-color: #0056b3;
+    transform: scale(1.05);
+}
+
+/* Upload Items Button */
+.add-item-button {
+    background-color: #28a745;  /* Green */
+    color: white;
+}
+
+.add-item-button:hover {
     background-color: #218838;
+    transform: scale(1.05);
+}
+
+/* Export Items Button */
+.export-items-button {
+    background-color: #17a2b8;  /* Teal */
+    color: white;
+}
+
+.export-items-button:hover {
+    background-color: #138496;
+    transform: scale(1.05);
+}
+
+/* Export All Imports Button */
+.export-all-button {
+    background-color: #ffc107;  /* Yellow */
+    color: black;
+}
+
+.export-all-button:hover {
+    background-color: #e0a800;
+    transform: scale(1.05);
 }
 
 /* Table Styles */
@@ -63,9 +114,8 @@ tr:nth-child(even) {
     background-color: #f2f2f2;
 }
 
-/* Buttons */
-.edit-button, .finish-button, .delete-button {
-    border: none;
+/* Action Buttons */
+.edit-button, .finish-button, .delete-button, .export-excel-button {
     padding: 8px 14px;
     border-radius: 5px;
     font-size: 12px;
@@ -109,6 +159,23 @@ tr:nth-child(even) {
     background-color: #c82333;
 }
 
+/* Export Excel Button */
+.export-excel-button {
+    background-color: #17a2b8; /* Teal color */
+    color: white;
+}
+
+.export-excel-button:hover {
+    background-color: #138496;
+}
+
+/* Adjust Buttons Layout */
+.actions {
+    display: flex;
+    gap: 8px;
+    justify-content: center;
+}
+
 /* Responsive Design */
 @media screen and (max-width: 768px) {
     .container {
@@ -124,55 +191,8 @@ tr:nth-child(even) {
         padding: 8px;
     }
 
-    .add-button {
+    .button-group a {
         padding: 8px 14px;
-        font-size: 14px;
+        font-size: 12px;
     }
-}
-
-
-
-/* Export Excel Button */
-.export-excel-button {
-    background-color: #17a2b8; /* Teal color */
-    color: white;
-    border: none;
-    padding: 8px 14px;
-    border-radius: 5px;
-    font-size: 12px;
-    font-weight: bold;
-    cursor: pointer;
-    transition: background 0.3s ease;
-}
-
-.export-excel-button:hover {
-    background-color: #138496;
-}
-
-/* Adjust Buttons Layout */
-.actions {
-    display: flex;
-    gap: 8px;
-    justify-content: center;
-}
-
-
-.button-group {
-    display: flex;
-    gap: 10px;
-}
-
-.export-all-button {
-    text-decoration: none;
-    background-color: #17a2b8;
-    color: white;
-    padding: 10px 20px;
-    border-radius: 5px;
-    font-weight: bold;
-    display: inline-block;
-    transition: background 0.3s ease;
-}
-
-.export-all-button:hover {
-    background-color: #138496;
 }

@@ -193,7 +193,7 @@ input:focus, textarea:focus, select:focus {
     }
 }
 
-
+/* Currency Dropdown */
 #id_currency {
     width: 100%;
     padding: 10px;
@@ -202,4 +202,46 @@ input:focus, textarea:focus, select:focus {
     border-radius: 5px;
     font-size: 14px;
     box-sizing: border-box;
+}
+
+/* File Upload Container */
+.file-upload-container {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 15px;
+    justify-content: space-between;
+    margin-top: 20px;
+}
+
+.drop-area {
+    width: 48%;
+    padding: 20px;
+    border: 2px dashed #007bff;
+    border-radius: 5px;
+    text-align: center;
+    font-size: 14px;
+    color: #555;
+    background-color: #f8f9fa;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.drop-area.drag-over {
+    background-color: #e3f2fd;
+}
+
+.drop-area p {
+    margin: 0;
+    font-weight: bold;
+}
+
+.file-input {
+    display: none;
+}
+
+/* Responsive File Upload */
+@media screen and (max-width: 768px) {
+    .drop-area {
+        width: 100%;
+    }
 }

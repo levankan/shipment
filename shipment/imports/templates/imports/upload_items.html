@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    {% load static %}
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Upload Items</title>
+    <link rel="stylesheet" href="{% static 'css/imports/upload_items.css' %}">
+</head>
+<body>
+    <div class="container">
+        <h1>Upload Items</h1>
+        <form method="post" enctype="multipart/form-data">
+            {% csrf_token %}
+            <label for="item_file">Upload Excel File:</label>
+            <input type="file" name="item_file" id="item_file" accept=".xls,.xlsx" required>
+            <button type="submit">Upload</button>
+        </form>
+    </div>
+</body>
+</html>

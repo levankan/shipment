@@ -1,6 +1,5 @@
 from django.db import models
-
-from django.db import models
+from django_countries.fields import CountryField
 
 # ✅ Define Choices Outside the Model (Prevents Import Errors)
 PACKAGE_TYPE_CHOICES = [
@@ -47,7 +46,7 @@ FORWARDER_CHOICES = [
 class Import(models.Model):
     unique_number = models.CharField(max_length=10, unique=True, editable=False)
     vendor_name = models.CharField(max_length=100)
-    country = models.CharField(max_length=100)
+    country = CountryField() 
     incoterms = models.CharField(max_length=3, choices=INCOTERMS_CHOICES)
     operation = models.CharField(max_length=50, choices=[
         ('import', 'Import'),
@@ -61,18 +60,24 @@ class Import(models.Model):
     status = models.CharField(max_length=10, choices=STATUS_CHOICES, default='Active')
     date_created = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
+    tracking_number = models.CharField(max_length=100, blank=True, null=True)  # ✅ New field
 
     def save(self, *args, **kwargs):
         if not self.unique_number:
-            last_import = Import.objects.all().order_by('id').last()
-            number = int(last_import.unique_number.replace("IMP", "")) + 1 if last_import else 1
+            last_import = Import.objects.order_by('-id').first()  # ✅ More efficient
+            if last_import and last_import.unique_number.startswith("IMP"):
+                try:
+                    number = int(last_import.unique_number.replace("IMP", "")) + 1
+                except ValueError:
+                    number = 1  # If number conversion fails, reset to 1
+            else:
+                number = 1  # No previous imports exist
+
             self.unique_number = f"IMP{str(number).zfill(5)}"
         super().save(*args, **kwargs)
 
     def __str__(self):
         return self.unique_number
-
-
 
 
 class ImportDetail(models.Model):
@@ -83,7 +88,13 @@ class ImportDetail(models.Model):
     description_eng = models.TextField()
     quantity = models.IntegerField()
     unit_cost = models.FloatField()
-    line_cost = models.FloatField()
+    line_cost = models.FloatField(blank=True, null=True)  # ✅ Allow null for auto-calculation
+
+    def save(self, *args, **kwargs):
+        # ✅ Automatically calculate line_cost if not provided
+        if self.line_cost is None:
+            self.line_cost = self.unit_cost * self.quantity
+        super().save(*args, **kwargs)
 
     def __str__(self):
         return f"{self.import_instance.unique_number} - {self.item_number}"
@@ -99,3 +110,14 @@ class Package(models.Model):
 
     def __str__(self):
         return f"{self.package_type} - {int(self.length)}x{int(self.width)}x{int(self.height)} - {int(self.gross_weight)}kg"
+
+
+class Item(models.Model):
+    item_number = models.CharField(max_length=50, unique=True)  # ✅ Unique Item Number
+    description_eng = models.CharField(max_length=255)
+    description_geo = models.CharField(max_length=255, blank=True, null=True)
+    hs_code = models.CharField(max_length=50, blank=True, null=True)
+    net_weight = models.FloatField()
+
+    def __str__(self):
+        return f"{self.item_number} - {self.description_eng}"
