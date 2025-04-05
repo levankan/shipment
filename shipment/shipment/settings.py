@@ -43,6 +43,7 @@ INSTALLED_APPS = [
     'sales',
     'authapp',
     'imports',
+    'warehouse',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',

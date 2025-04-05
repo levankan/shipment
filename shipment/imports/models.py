@@ -1,7 +1,11 @@
+import os
 from django.db import models
 from django_countries.fields import CountryField
 
-# ✅ Define Choices Outside the Model (Prevents Import Errors)
+# ✅ Function to generate dynamic file path
+def upload_to(instance, filename):
+    return os.path.join('uploads/imports', instance.unique_number, filename)
+
 PACKAGE_TYPE_CHOICES = [
     ('PALLET', 'Pallet'),
     ('BOX', 'Box'),
@@ -22,6 +26,7 @@ INCOTERMS_CHOICES = [
 STATUS_CHOICES = [
     ('Active', 'Active'),
     ('Finished', 'Finished'),
+    ('Delivered', 'Delivered'), 
 ]
 
 CURRENCY_CHOICES = [
@@ -42,7 +47,7 @@ FORWARDER_CHOICES = [
     ('Other', 'Other'),
 ]
 
-
+# ✅ Import Model with File Upload Fields
 class Import(models.Model):
     unique_number = models.CharField(max_length=10, unique=True, editable=False)
     vendor_name = models.CharField(max_length=100)
@@ -55,29 +60,47 @@ class Import(models.Model):
     is_dangerous = models.BooleanField(default=False)
     is_stackable = models.BooleanField(default=True)
     pickup_address = models.TextField()
-    currency = models.CharField(max_length=4, choices=CURRENCY_CHOICES, default='USD')  # ✅ Added currency field
+    currency = models.CharField(max_length=4, choices=CURRENCY_CHOICES, default='USD')
     forwarder_company = models.CharField(max_length=50, choices=FORWARDER_CHOICES, default="Other")
     status = models.CharField(max_length=10, choices=STATUS_CHOICES, default='Active')
     date_created = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
-    tracking_number = models.CharField(max_length=100, blank=True, null=True)  # ✅ New field
+    tracking_number = models.CharField(max_length=100, blank=True, null=True)
+
+    # ✅ File Upload Fields
+    commercial_invoice = models.FileField(upload_to=upload_to, blank=True, null=True)
+    transportation_invoice = models.FileField(upload_to=upload_to, blank=True, null=True)
+    brokerage_invoice = models.FileField(upload_to=upload_to, blank=True, null=True)
+    other_docs = models.FileField(upload_to=upload_to, blank=True, null=True)
+
+    #transportation and other charges
+
+    transportation_cost = models.FloatField(blank=True, null=True)
+    transportation_currency = models.CharField(max_length=4, choices=CURRENCY_CHOICES, blank=True, null=True)
+
+    brokerage_cost = models.FloatField(blank=True, null=True)
+    brokerage_currency = models.CharField(max_length=4, choices=CURRENCY_CHOICES, blank=True, null=True)
+
+    other_cost = models.FloatField(blank=True, null=True)
+    other_currency = models.CharField(max_length=4, choices=CURRENCY_CHOICES, blank=True, null=True)
 
     def save(self, *args, **kwargs):
         if not self.unique_number:
-            last_import = Import.objects.order_by('-id').first()  # ✅ More efficient
+            last_import = Import.objects.order_by('-id').first()
             if last_import and last_import.unique_number.startswith("IMP"):
                 try:
                     number = int(last_import.unique_number.replace("IMP", "")) + 1
                 except ValueError:
-                    number = 1  # If number conversion fails, reset to 1
+                    number = 1
             else:
-                number = 1  # No previous imports exist
+                number = 1
 
             self.unique_number = f"IMP{str(number).zfill(5)}"
         super().save(*args, **kwargs)
 
     def __str__(self):
         return self.unique_number
+
 
 
 class ImportDetail(models.Model):

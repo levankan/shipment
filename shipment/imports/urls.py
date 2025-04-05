@@ -17,4 +17,3 @@ urlpatterns = [
     path('<str:unique_number>/finish/', finish_import, name='finish_import'),
     path('<str:unique_number>/export_excel/', export_import_excel, name='export_import_excel'),
 ]
-

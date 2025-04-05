@@ -11,6 +11,7 @@
         <a href="{% url 'sales_home' %}" class="dashboard-button">SALES</a>
         <a href="{% url 'import_list' %}" class="dashboard-button">IMPORTS</a>
         <a href="" class="dashboard-button">EXPORTS</a>
+        <a href="{% url 'warehouse_scan' %}" class="dashboard-button">WAREHOUSE</a>
     </div>
 
     {% if user.is_superuser %}

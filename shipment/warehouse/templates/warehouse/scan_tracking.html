@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    {% load static %}
+    <meta charset="UTF-8">
+    <title>Scan Shipment</title>
+    <link rel="stylesheet" href="{% static 'css/warehouse/scan_tracking.css' %}">
+</head>
+<body>
+    <div class="container">
+        <h1>📦 Scan or Enter Tracking Number</h1>
+
+        <form method="post" action="{% url 'warehouse_scan' %}">
+            {% csrf_token %}
+            <label for="tracking">Tracking Number:</label>
+            <input type="text" id="tracking" name="tracking_number" required autofocus>
+
+            <div class="button-group">
+                <button type="submit" name="action" value="enter">Enter</button>
+                <button type="submit" name="action" value="scan">Scan</button>
+            </div>
+        </form>
+
+        {% if message %}
+            <p class="result">{{ message }}</p>
+        {% endif %}
+    </div>
+
+    <script>
+        // Auto-focus tracking input when page loads
+        window.onload = function() {
+            document.getElementById("tracking").focus();
+        };
+    
+        // Optional: attach click to "Scan" button to focus input
+        document.querySelector('button[value="scan"]').addEventListener("click", function(e) {
+            e.preventDefault();  // prevents default form submit
+            document.getElementById("tracking").focus();
+        });
+    
+        // Submit form when Enter is pressed inside the input
+        document.getElementById("tracking").addEventListener("keypress", function(e) {
+            if (e.key === "Enter") {
+                e.preventDefault();
+                document.querySelector("form").submit();
+            }
+        });
+    </script>
+    
+</body>
+</html>

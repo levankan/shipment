@@ -22,5 +22,6 @@ urlpatterns = [
     path('', include('authapp.urls')),
     path('sales/', include('sales.urls')),  
     path('imports/', include('imports.urls')),
+    path('warehouse/', include('warehouse.urls')),
 ]
 

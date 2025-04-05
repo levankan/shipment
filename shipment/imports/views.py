@@ -16,16 +16,20 @@ from .models import Item
 
 @login_required
 def register_import(request):
-    import_number = None  # ✅ Define import_number at the start
+    import_number = None  
 
     if request.method == 'POST':
-        import_form = ImportForm(request.POST)
+        import_form = ImportForm(request.POST, request.FILES)
 
         if import_form.is_valid():
             new_import = import_form.save()
 
-            # ✅ Assign import_number after successful form submission
-            import_number = new_import.unique_number  
+            # ✅ Handle file uploads correctly
+            new_import.commercial_invoice = request.FILES.get('commercial_invoice')
+            new_import.transportation_invoice = request.FILES.get('transportation_invoice')
+            new_import.brokerage_invoice = request.FILES.get('brokerage_invoice')
+            new_import.other_docs = request.FILES.get('other_docs')
+            new_import.save()  # ✅ Save changes after file upload
 
             try:
                 # ✅ Save package data
@@ -83,7 +87,7 @@ def register_import(request):
 
     return render(request, 'imports/register_import.html', {
         'import_form': import_form,
-        'import_number': import_number,  # ✅ import_number is always assigned
+        'import_number': import_number,
         'package_type_choices': PACKAGE_TYPE_CHOICES
     })
 
@@ -118,32 +122,25 @@ def import_detail(request, unique_number):
 @login_required
 def edit_import(request, unique_number):
     import_instance = get_object_or_404(Import, unique_number=unique_number)
-    import_details = ImportDetail.objects.filter(import_instance=import_instance)
 
     if request.method == "POST":
-        form = ImportForm(request.POST, instance=import_instance)
+        form = ImportForm(request.POST, request.FILES, instance=import_instance)
         if form.is_valid():
-            updated_import = form.save()
+            import_instance = form.save(commit=False)
 
-            # ✅ Delete old ImportDetail records
-            ImportDetail.objects.filter(import_instance=updated_import).delete()
+            # ✅ Handle file uploads
+            if request.FILES.get('commercial_invoice'):
+                import_instance.commercial_invoice = request.FILES.get('commercial_invoice')
+            if request.FILES.get('transportation_invoice'):
+                import_instance.transportation_invoice = request.FILES.get('transportation_invoice')
+            if request.FILES.get('brokerage_invoice'):
+                import_instance.brokerage_invoice = request.FILES.get('brokerage_invoice')
+            if request.FILES.get('other_docs'):
+                import_instance.other_docs = request.FILES.get('other_docs')
 
-            # ✅ Save new Excel data
-            excel_data_json = request.POST.get("excel_data", "[]")
-            excel_data = json.loads(excel_data_json) if excel_data_json else []
+            import_instance.save()  # ✅ Save updated files
 
-            for record in excel_data:
-                ImportDetail.objects.create(
-                    import_instance=updated_import,
-                    po_number=record.get("poNumber", ""),
-                    line_number=int(record.get("lineNumber", 0)),
-                    item_number=record.get("itemNumber", ""),
-                    description_eng=record.get("descriptionEng", ""),
-                    quantity=int(record.get("quantity", 0)),
-                    unit_cost=float(record.get("unitCost", 0)),
-                    line_cost=float(record['unitCost']) * int(record['quantity']), 
-                )
-
+            messages.success(request, "✅ Import updated successfully!")
             return redirect('import_list')
 
     else:
@@ -151,9 +148,10 @@ def edit_import(request, unique_number):
 
     return render(request, "imports/edit_import.html", {
         "form": form,
-        "import": import_instance,
-        "import_details": list(import_details.values()),  # ✅ Send existing Excel data
+        "import": import_instance
     })
+
+
 
 
 
@@ -499,3 +497,6 @@ def export_items_excel(request):
         df.to_excel(writer, sheet_name="Items", index=False)
 
     return response
+
+
+

@@ -11,5 +11,6 @@ class CustomUser(AbstractUser):
         ('logistics', 'Logistics'),
         ('procurement', 'Procurement'),
         ('sales', 'Sales'),
+        ('warehouse', 'Warehouse Employee'),
     ]
     role = models.CharField(max_length=20, choices=ROLE_CHOICES, default='main_user')

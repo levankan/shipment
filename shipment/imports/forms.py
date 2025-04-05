@@ -10,6 +10,16 @@ class ImportForm(forms.ModelForm):
     incoterms = forms.ChoiceField(choices=INCOTERMS_CHOICES, widget=forms.Select())
     currency = forms.ChoiceField(choices=CURRENCY_CHOICES, widget=forms.Select())
 
+    transportation_currency = forms.ChoiceField(choices=CURRENCY_CHOICES, widget=forms.Select(), required=False)
+    brokerage_currency = forms.ChoiceField(choices=CURRENCY_CHOICES, widget=forms.Select(), required=False)
+    other_currency = forms.ChoiceField(choices=CURRENCY_CHOICES, widget=forms.Select(), required=False)
+
+    commercial_invoice = forms.FileField(required=False, label="Commercial Invoice")
+    transportation_invoice = forms.FileField(required=False, label="Transportation Invoice")
+    brokerage_invoice = forms.FileField(required=False, label="Brokerage Invoice")
+    other_docs = forms.FileField(required=False, label="Other Documents")
+    
+
 class PackageForm(forms.ModelForm):
     class Meta:
         model = Package

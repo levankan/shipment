@@ -22,17 +22,19 @@
         <!-- Import Details -->
         <div class="import-info">
             <p><strong>Vendor Name:</strong> {{ import.vendor_name }}</p>
-            <p><strong>Description:</strong> {{ import.description }}</p>
             <p><strong>Country:</strong> {{ import.country }}</p>
             <p><strong>Incoterms:</strong> {{ import.get_incoterms_display }}</p>
             <p><strong>Operation:</strong> {{ import.get_operation_display }}</p>
             <p><strong>Dangerous Goods:</strong> {% if import.is_dangerous %} ✅ Yes {% else %} ❌ No {% endif %}</p>
             <p><strong>Stackable:</strong> {% if import.is_stackable %} ✅ Yes {% else %} ❌ No {% endif %}</p>
             <p><strong>Pickup Address:</strong> {{ import.pickup_address }}</p>
-            <p><strong>Tracking Number:</strong> {{ import.tracking_number}}</p>
+            <p><strong>Tracking Number:</strong> {{ import.tracking_number }}</p>
+            <p><strong>Currency:</strong> {{ import.get_currency_display }}</p>
+            <p><strong>Forwarder Company:</strong> {{ import.forwarder_company }}</p>
             <p><strong>Date Created:</strong> {{ import.date_created }}</p>
             <p><strong>Last Updated:</strong> {{ import.updated_at }}</p>
         </div>
+        
 
 
         <h2>Weight and Dimensions</h2>
@@ -87,6 +89,7 @@
                         <td>{{ import.get_currency_display }}</td>
                     </tr>
                 {% endfor %}
+                
             </tbody>
         </table>
         {% else %}
