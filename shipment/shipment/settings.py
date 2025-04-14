@@ -142,5 +142,5 @@ EMAIL_HOST = 'smtp.gmail.com'
 EMAIL_PORT = 587
 EMAIL_USE_TLS = True
 EMAIL_HOST_USER = 'kana251288@gmail.com'
-EMAIL_HOST_PASSWORD = 'bbrhecnhuwdzwlwh'  # ჩასვი App Password აქ
-DEFAULT_FROM_EMAIL = 'kana251288@gmail.com'
+EMAIL_HOST_PASSWORD = 'აქ ჩაიწერება პაროლი'  # ჩასვი App Password აქ
+DEFAULT_FROM_EMAIL = 'აქ ჩაიწერება ემეილი'
